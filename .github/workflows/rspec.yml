@@ -13,12 +13,11 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      test-db:
+      db:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: root
           MYSQL_USER: user
-          MYSQL_PASSWORD: password
+          MYSQL_ROOT_PASSWORD: password
         ports:
           - 3306:3306
         options: >-
