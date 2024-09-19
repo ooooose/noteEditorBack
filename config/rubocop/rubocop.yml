@@ -1,0 +1,212 @@
+AllCops:
+  Exclude:
+    - "vendor/**/*"
+    - "db/*.rb"
+    - "db/migrate/*"
+    - "Gemfile"
+    - "config/**/*"
+    - "bin/**/*"
+    - "spec/**/*"
+
+#################### Layout ################################
+
+Layout/ClassStructure:
+  Enabled: true
+
+Layout/DotPosition:
+  EnforcedStyle: trailing
+
+Layout/ExtraSpacing:
+  Exclude:
+    - "db/migrate/*.rb"
+    - "db/*.rb"
+
+Layout/FirstArrayElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/IndentationConsistency:
+  EnforcedStyle: indented_internal_methods
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented_relative_to_receiver
+
+Layout/SpaceInsideBlockBraces:
+  SpaceBeforeBlockParameters: false
+
+#################### Lint ##################################
+
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - "spec/**/*_spec.rb"
+
+Lint/EmptyWhen:
+  Enabled: false
+
+Lint/InheritException:
+  EnforcedStyle: standard_error
+
+Lint/UnderscorePrefixedVariableName:
+  Enabled: false
+
+Lint/UnusedMethodArgument:
+  Enabled: false
+
+Lint/Void:
+  CheckForMethodsWithNoSideEffects: true
+
+#################### Metrics ###############################
+
+Metrics/AbcSize:
+  Max: 24
+
+Metrics/CyclomaticComplexity:
+  Max: 8
+
+Layout/LineLength:
+  Max: 120
+  Exclude:
+    - "db/migrate/*.rb"
+
+Metrics/MethodLength:
+  Max: 20 
+  Exclude:
+    - "db/migrate/*.rb"
+
+Metrics/ModuleLength:
+  Max: 150 
+
+Metrics/PerceivedComplexity:
+  Max: 8
+
+#################### Naming ################################
+
+Naming/PredicateName:
+  ForbiddenPrefixes:
+    - "is_"
+    - "have_"
+  NamePrefix:
+    - "is_"
+    - "have_"
+
+Naming/MethodParameterName:
+  Enabled: false
+
+#################### Security ##############################
+
+Security/YAMLLoad:
+  Enabled: false
+
+#################### Style #################################
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/BlockDelimiters:
+  AutoCorrect: false
+  Exclude:
+    - "spec/**/*_spec.rb"
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/RedundantSort:
+  Enabled: false
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/EmptyCaseCondition:
+  Enabled: false
+
+Style/EmptyElse:
+  EnforcedStyle: empty
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
+
+Style/GuardClause:
+  MinBodyLength: 5
+
+Style/IfInsideElse:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/Lambda:
+  EnforcedStyle: literal
+
+Style/MethodCalledOnDoEndBlock:
+  Enabled: true
+
+Style/MixinUsage:
+  Exclude:
+    - "bin/setup"
+    - "bin/update"
+    - "spec/dummy/bin/setup"
+    - "spec/dummy/bin/update"
+
+Style/NumericLiterals:
+  MinDigits: 10
+  Strict: true
+
+Style/NumericPredicate:
+  Enabled: false
+
+Style/OrAssignment:
+  Enabled: false
+
+Style/PerlBackrefs:
+  AutoCorrect: false
+
+Style/PreferredHashMethods:
+  EnforcedStyle: verbose
+
+Style/RedundantReturn:
+  AllowMultipleReturnValues: true
+
+Style/RedundantSelf:
+  Enabled: false
+
+Style/RescueStandardError:
+  EnforcedStyle: implicit
+
+Style/SafeNavigation:
+  Enabled: false
+
+Style/Semicolon:
+  Exclude:
+    - "spec/**/*_spec.rb"
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+
+Style/StringMethods:
+  Enabled: true
+
+Style/SymbolArray:
+  Enabled: false
+
+Style/TernaryParentheses:
+  EnforcedStyle: require_parentheses_when_complex
+
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/WordArray:
+  Enabled: false
+
+Style/ZeroLengthPredicate:
+  Enabled: false

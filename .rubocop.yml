@@ -1,0 +1,20 @@
+require:
+  - rubocop-rails
+  - rubocop-rspec
+  - rubocop-performance
+
+inherit_from:
+  - config/rubocop/rubocop.yml
+  - config/rubocop/rails.yml
+  - config/rubocop/rspec.yml
+
+AllCops:
+  TargetRubyVersion: 3.3
+  Exclude:
+    - 'vendor/**/*'
+    - 'bundle/**/*'
+    - 'bin/**/*'
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'lib/tasks/auto_annotate_models.rake'
+  SuggestExtensions: false

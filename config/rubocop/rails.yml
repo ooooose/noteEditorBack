@@ -1,0 +1,51 @@
+Rails:
+  Enabled: true
+
+Rails/ActiveRecordCallbacksOrder:
+  Enabled: true
+
+Rails/Delegate:
+  Enabled: false
+
+Rails/ApplicationController:
+  Enabled: false
+
+Rails/Exit:
+  Enabled: false
+
+# 日本語でのコメントを許可
+AsciiComments:
+  Enabled: false
+
+# クラスのコメント必須を無視
+Documentation:
+  Enabled: false
+
+# モジュール名::クラス名の定義を許可
+ClassAndModuleChildren:
+  Enabled: false
+
+# 文字リテラルのイミュータブル宣言を無視（freezeになるのはRuby3以降）
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Rails/FilePath:
+  Enabled: false
+
+Rails/PluralizationGrammar:
+  Enabled: false
+
+Rails/Present:
+  Enabled: false
+
+Rails/SafeNavigation:
+  ConvertTry: true
+
+Rails/SaveBang:
+  Enabled: true
+
+Rails/UnknownEnv:
+  Environments:
+    - development # rubocop default.yml
+    - test # rubocop default.yml
+    - production # rubocop default.yml
