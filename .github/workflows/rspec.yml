@@ -16,7 +16,7 @@ jobs:
       db:
         image: mysql:8.0
         env:
-          MYSQL_USER: user
+          MYSQL_USER: root
           MYSQL_ROOT_PASSWORD: password
         ports:
           - 3306:3306
@@ -41,11 +41,18 @@ jobs:
           gem install bundler
           bundle install
 
+      - name: Wait for MySQL to be ready
+        run: |
+          until mysqladmin ping -h db --silent; do
+            echo "Waiting for MySQL..."
+            sleep 2
+          done
+
       - name: Set up the database
         env:
           RAILS_ENV: test
-          DATABASE_HOST: 127.0.0.1
-          DATABASE_USERNAME: user
+          DATABASE_HOST: db
+          DATABASE_USERNAME: root
           DATABASE_PASSWORD: password
         run: |
           bin/rails db:create db:schema:load
