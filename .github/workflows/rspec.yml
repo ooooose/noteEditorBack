@@ -1,4 +1,4 @@
-name: CI
+name: RSpec
 
 on:
   push:
@@ -50,11 +50,13 @@ jobs:
       - name: Set up the database
         env:
           RAILS_ENV: test
+          DB_HOST: db
         run: |
           bin/rails db:create db:schema:load
 
       - name: Run tests
         env:
           RAILS_ENV: test
+          DB_HOST: db
         run: |
           bundle exec rspec
