@@ -16,15 +16,16 @@ services:
     depends_on:
       - db
   db:
+    image: postgres:14
     restart: always
-    image: mysql:8.1
     environment:
-      MYSQL_USER: user
-      MYSQL_ROOT_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: app_development
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
-  mysql_data:
+  postgres_data:
