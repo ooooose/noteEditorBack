@@ -60,3 +60,6 @@ routes:
 
 console:
 	docker compose run --rm back bin/rails c
+
+shell:
+	docker compose exec back bash

@@ -38,6 +38,8 @@ gem "base64"
 gem "bigdecimal"
 gem "drb"
 gem "mutex_m"
+gem 'logger'
+gem 'ostruct'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
