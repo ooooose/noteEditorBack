@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_30_114233) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_30_134410) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -21,6 +21,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_30_114233) do
     t.datetime "updated_at", null: false
     t.index ["contests_id"], name: "index_badges_on_contests_id"
     t.index ["pictures_id"], name: "index_badges_on_pictures_id"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "picture_id", null: false
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["picture_id"], name: "index_comments_on_picture_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
   create_table "contests", force: :cascade do |t|
@@ -36,11 +46,22 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_30_114233) do
     t.index ["title"], name: "unique_contest_title", unique: true
   end
 
+  create_table "likes", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "picture_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["picture_id"], name: "index_likes_on_picture_id"
+    t.index ["user_id", "picture_id"], name: "index_likes_on_user_id_and_picture_id", unique: true
+    t.index ["user_id"], name: "index_likes_on_user_id"
+  end
+
   create_table "pictures", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "theme_id", null: false
     t.string "uid", null: false
     t.text "image_url", null: false
+    t.integer "frame_id", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["created_at"], name: "index_pictures_on_created_at"
@@ -66,12 +87,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_30_114233) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.index ["email"], name: "unique_emails", unique: true
-    t.index ["uid"], name: "unique_uid", unique: true
+    t.index ["email"], name: "unique_user_emails", unique: true
+    t.index ["uid"], name: "unique_user_uid", unique: true
   end
 
   add_foreign_key "badges", "contests", column: "contests_id"
   add_foreign_key "badges", "pictures", column: "pictures_id"
+  add_foreign_key "comments", "pictures"
+  add_foreign_key "comments", "users"
+  add_foreign_key "likes", "pictures"
+  add_foreign_key "likes", "users"
   add_foreign_key "pictures", "themes"
   add_foreign_key "pictures", "users"
 end
