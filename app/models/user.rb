@@ -16,6 +16,7 @@
 #  fk_rails_...  (theme_id => themes.id)
 #
 class User < ApplicationRecord
+  include JwtAuthenticatable
   # Association Layer
   has_many :pictures, dependent: :destroy
   has_many :themes, through: :pictures
@@ -35,8 +36,7 @@ class User < ApplicationRecord
   # Class Method Layer
   def self.find_with_jwt(encoded_token)
     Rails.logger.debug "Encoded token: #{encoded_token}"
-    decoded_token = JWT.decode(encoded_token, Rails.application.credentials.secret_key_base, true,
-                               { algorithm: "HS256" })
+    decoded_token = JwtAuthenticatable.decode(encoded_token)
     payload = decoded_token.first
     Rails.logger.debug "Decoded token payload: #{payload}"
     find(payload["user_id"])
