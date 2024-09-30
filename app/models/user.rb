@@ -36,7 +36,7 @@ class User < ApplicationRecord
   # Class Method Layer
   def self.find_with_jwt(encoded_token)
     Rails.logger.debug "Encoded token: #{encoded_token}"
-    decoded_token = JwtAuthenticatable.decode(encoded_token)
+    decoded_token = decode(encoded_token)
     payload = decoded_token.first
     Rails.logger.debug "Decoded token payload: #{payload}"
     find(payload["user_id"])
