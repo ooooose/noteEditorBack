@@ -21,7 +21,6 @@ class Picture < ApplicationRecord
   has_many :likers, through: :likes, source: :user
   has_many :comments, inverse_of: :picture, dependent: :destroy
 
-
   validates :image, presence: true
   validates :frame_id, presence: true
 end

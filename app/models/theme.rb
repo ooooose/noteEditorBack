@@ -10,7 +10,7 @@
 # #
 #
 class Theme < ApplicationRecord
-  has_many :pictures, dependent: :destroy, -> { order(created_at: :desc) }, inverse_of: :theme, dependent: :destroy
+  has_many :pictures, -> { order(created_at: :desc) }, inverse_of: :theme, dependent: :destroy
 
   validates :title, presence: true, uniqueness: { case_sensitive: false }
 end
