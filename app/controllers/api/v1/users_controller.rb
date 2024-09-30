@@ -13,7 +13,7 @@ class Api::V1::UsersController < ApplicationController
       end
     end
 
-    encoded_token = encode(@current_user.id)
+    encoded_token = encode(user_id: @current_user.id)
 
     render json: { user: @current_user, accessToken: encoded_token, status: :ok }
   rescue => e

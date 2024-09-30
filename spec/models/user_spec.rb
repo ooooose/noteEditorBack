@@ -49,8 +49,6 @@ RSpec.describe User, type: :model do
 
     context "when the token is valid" do
       it "finds a user" do
-        puts "token: #{token}"
-        puts "user: #{user}"
         expect(described_class.find_with_jwt(token)).to eq user
       end
     end
