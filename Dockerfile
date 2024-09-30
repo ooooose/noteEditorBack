@@ -1,4 +1,4 @@
-FROM ruby:3.3.1
+FROM ruby:3.3.5
 ENV TZ Asia/Tokyo
 ENV RAILS_ENV=development
 

@@ -1,0 +1,59 @@
+name: RSpec
+
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+    services:
+      db:
+        image: postgres:14
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DATABASE: test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    strategy:
+      matrix:
+        ruby-version: [3.3]
+        rails-version: [7.1.3]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true
+
+      - name: Install dependencies
+        run: |
+          gem install bundler
+          bundle install
+
+      - name: Set up the database
+        env:
+          RAILS_ENV: test
+        run: |
+          cp config/database.ci.yml config/database.yml
+          bin/rails db:create RAILS_ENV=test
+          bin/rails db:migrate RAILS_ENV=test
+
+      - name: Run tests
+        env:
+          RAILS_ENV: test
+        run: |
+          bundle exec rspec
