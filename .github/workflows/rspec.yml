@@ -39,9 +39,16 @@ jobs:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
 
+      - name: Cache bundle
+        uses: actions/cache@v3
+        with:
+          path: vendor/bundle
+          key: bundle-v1-${{ hashFiles('Gemfile.lock') }}
+
       - name: Install dependencies
         run: |
-          gem install bundler
+          bundle config --local path vendor/bundle
+          bundle config --local without production
           bundle install
 
       - name: Set up the database
@@ -52,7 +59,7 @@ jobs:
           bin/rails db:create RAILS_ENV=test
           bin/rails db:migrate RAILS_ENV=test
 
-      - name: Run tests
+      - name: Run RSpec
         env:
           RAILS_ENV: test
         run: |
