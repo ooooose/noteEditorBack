@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-  include JwtAuthenticator
+  include JwtAuthenticatable
   skip_before_action :authenticate_request, only: %i[create]
 
   def create
@@ -13,7 +13,7 @@ class Api::V1::UsersController < ApplicationController
       end
     end
 
-    encoded_token = JwtAuthenticator.encode(@current_user.id)
+    encoded_token =　encode(@current_user.id)
 
     render json: { user: @current_user, accessToken: encoded_token, status: :ok }
   rescue => e
