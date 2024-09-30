@@ -23,6 +23,7 @@ module App
     #
     config.time_zone = "Asia/Tokyo"
     config.active_record.default_timezone = :local
+    config.autoload_paths += %W(#{config.root}/app/controllers/concerns #{config.root}/app/models/concerns)
 
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
