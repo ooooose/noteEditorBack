@@ -35,7 +35,8 @@ class User < ApplicationRecord
   # Class Method Layer
   def self.find_with_jwt(encoded_token)
     Rails.logger.debug "Encoded token: #{encoded_token}"
-    decoded_token = JWT.decode(encoded_token, Rails.application.credentials.secret_key_base, true, { algorithm: "HS256" })
+    decoded_token = JWT.decode(encoded_token, Rails.application.credentials.secret_key_base, true,
+                               { algorithm: "HS256" })
     payload = decoded_token.first
     Rails.logger.debug "Decoded token payload: #{payload}"
     find(payload["user_id"])
