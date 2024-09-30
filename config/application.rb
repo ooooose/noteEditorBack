@@ -22,8 +22,7 @@ module App
     # in config/environments, which are processed later.
     #
     config.time_zone = "Asia/Tokyo"
-    config.autoload_paths << Rails.root.join('app/services')
-    # config.eager_load_paths << Rails.root.join("extras")
+    config.eager_load_paths << Rails.root.join("app/services")
 
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
