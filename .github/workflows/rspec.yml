@@ -2,23 +2,20 @@ name: RSpec
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: .
     services:
       db:
         image: postgres:14
         ports:
           - 5432:5432
         env:
-          POSTGRES_DATABASE: app_test
+          POSTGRES_DATABASE: test
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
         options: >-
@@ -51,7 +48,9 @@ jobs:
         env:
           RAILS_ENV: test
         run: |
-          bin/rails db:create db:schema:load
+          cp config/database.ci.yml config/database.yml
+          bin/rails db:create RAILS_ENV=test
+          bin/rails db:migrate RAILS_ENV=test
 
       - name: Run tests
         env:
