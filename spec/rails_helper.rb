@@ -16,7 +16,7 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = true
 
-  config.fixture_path = ['spec/fixtures']
+  config.fixture_path = ["spec/fixtures"]
   # You can uncomment this line to turn off ActiveRecord support entirely.
   # config.use_active_record = false
 
