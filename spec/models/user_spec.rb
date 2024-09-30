@@ -42,13 +42,15 @@ RSpec.describe User, type: :model do
   # クラスメソッドのテスト
   describe ".find_with_jwt" do
     let!(:user) { create(:user) }
-    let!(:secret_key) { Rails.application.secrets.secret_key_base }
+    let!(:secret_key) { Rails.application.credentials.secret_key_base }
     let!(:token) do
       JWT.encode({ user_id: user.id, exp: 24.hours.from_now.to_i }, secret_key, "HS256")
     end
 
     context "when the token is valid" do
       it "finds a user" do
+        puts "token: #{token}"
+        puts "user: #{user}"
         expect(described_class.find_with_jwt(token)).to eq user
       end
     end
