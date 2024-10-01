@@ -22,7 +22,7 @@ class Picture < ApplicationRecord
   has_many :like_users, through: :likes, source: :user
   has_many :comments, inverse_of: :picture, dependent: :destroy
 
-  validates :image, presence: true
+  validates :image_url, presence: true
   validates :frame_id, presence: true
 
   def soft_destroy
