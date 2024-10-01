@@ -39,7 +39,6 @@ class User < ApplicationRecord
                                { algorithm: "HS256" })
     payload = decoded_token.first
     Rails.logger.debug "Decoded token payload: #{payload}"
-    puts "Decoded token payload: #{payload["user_id"]}"
     find(payload["user_id"])
   rescue JWT::DecodeError => e
     Rails.logger.error "JWT decode error: #{e.message}"
