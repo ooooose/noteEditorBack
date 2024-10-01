@@ -10,6 +10,7 @@ class Api::V1::PicturesController < ApplicationController
   # POST /api/v1/pictures
   def create
     picture = current_user.pictures.build(picture_params)
+    authorize picture
     if picture.save
       render json: picture, status: :created
     else
@@ -17,8 +18,19 @@ class Api::V1::PicturesController < ApplicationController
     end
   end
 
+  # PATCH /api/v1/pictures/:id
+  def update
+    authorize @picture
+    if @picture.update(picture_params)
+      render json: @picture, serializer: PictureSerializer, status: :ok
+    else
+      render json: { error: @picture.errors.full_messages.join(", ") }, status: :unprocessable_entity
+    end
+  end
+
   # DELETE /api/v1/pictures/:id
   def destroy
+    authorize @picture
     @picture.soft_destroy
     render json: { message: "Picture was successfully deleted" }, status: :ok
   rescue => e

@@ -79,6 +79,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_30_134410) do
     t.string "title", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_themes_on_deleted_at"
     t.index ["title"], name: "unique_theme_title", unique: true
   end
 

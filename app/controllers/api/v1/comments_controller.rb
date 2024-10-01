@@ -5,6 +5,7 @@ class Api::V1::CommentsController < ApplicationController
   def index
     picture = Picture.find(params[:picture_id])
     @comments = picture.comments
+    authorize @comments
 
     render json: @comments, each_serializer: CommentSerializer
   end
@@ -12,6 +13,7 @@ class Api::V1::CommentsController < ApplicationController
   # POST /api/v1/comments
   def create
     @comment = current_user.comments.build(comment_params)
+    authorize @comment
     if @comment.save
       render json: @comment, status: :created
     else
@@ -21,6 +23,7 @@ class Api::V1::CommentsController < ApplicationController
 
   # DELETE /api/v1/comments/:id
   def destroy
+    authorize @comment
     @comment.destroy!
     render json: { message: "Comment was successfully deleted" }, status: :ok
   rescue => e

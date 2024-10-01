@@ -33,6 +33,6 @@ class UserPolicy < ApplicationPolicy
   end
 
   def destroy?
-    general_check? && record_owner?
+    general_check? && general_check? && (record_owner? || user.admin?)
   end
 end
