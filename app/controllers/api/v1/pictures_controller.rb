@@ -27,11 +27,11 @@ class Api::V1::PicturesController < ApplicationController
 
   private
 
-  def set_picture
-    @picture = Picture.find(params[:id])
-  end
+    def set_picture
+      @picture = Picture.find(params[:id])
+    end
 
-  def picture_params
-    params.require(:picture).permit(:image, :theme_id)
-  end 
+    def picture_params
+      params.require(:picture).permit(:image, :theme_id)
+    end
 end
