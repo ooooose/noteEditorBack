@@ -5,6 +5,7 @@ class CreatePictures < ActiveRecord::Migration[7.1]
       t.references :theme, null: false, foreign_key: true
       t.string :uid, null: false, index: { unique: true, name: 'unique_picture_uid' }
       t.text :image_url, null: false
+      t.integer :frame_id, null: false, default: 0
 
       t.timestamps
     end
