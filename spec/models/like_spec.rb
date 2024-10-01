@@ -14,18 +14,20 @@ RSpec.describe Like, type: :model do
         expect(like).to be_valid
       end
     end
+
     context "when abnormal" do
       it "is invalid without a user_id" do
         like = build(:like, user_id: nil)
         expect(like).not_to be_valid
       end
+
       it "is invalid without a picture_id" do
         like = build(:like, picture_id: nil)
         expect(like).not_to be_valid
       end
     end
   end
-  
+
   describe "association" do
     it { is_expected.to belong_to(:user) }
     it { is_expected.to belong_to(:picture) }

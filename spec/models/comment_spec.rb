@@ -14,7 +14,7 @@ RSpec.describe Comment, type: :model do
         comment = build(:comment, body: nil)
         expect(comment).not_to be_valid
       end
-      
+
       it "is invalid without a user_id" do
         comment = build(:comment, user_id: nil)
         expect(comment).not_to be_valid
