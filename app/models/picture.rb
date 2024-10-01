@@ -6,6 +6,7 @@
 #  image_url  :text             not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  deleted_at :datetime
 # Indexes
 #  unique_picture_uid           (uid) UNIQUE
 #  index_pictures_on_created_at  (created_at)
@@ -18,9 +19,13 @@ class Picture < ApplicationRecord
   belongs_to :user
   belongs_to :theme
   has_many :likes, inverse_of: :picture, dependent: :destroy
-  has_many :likers, through: :likes, source: :user
+  has_many :like_users, through: :likes, source: :user
   has_many :comments, inverse_of: :picture, dependent: :destroy
 
   validates :image, presence: true
   validates :frame_id, presence: true
+
+  def soft_destroy
+    update!(deleted_at: Time.current)
+  end
 end

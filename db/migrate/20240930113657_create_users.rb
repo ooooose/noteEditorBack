@@ -8,7 +8,7 @@ class CreateUsers < ActiveRecord::Migration[7.1]
       t.integer :role, null: false, default: 1
 
       t.timestamps null: false
-      t.datetime :deleted_at
+      t.datetime :deleted_at, index: true
     end
   end
 end

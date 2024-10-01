@@ -8,6 +8,7 @@ class CreatePictures < ActiveRecord::Migration[7.1]
       t.integer :frame_id, null: false, default: 0
 
       t.timestamps
+      t.datetime :deleted_at, index: true
     end
 
     add_index :pictures, [:user_id, :theme_id], unique: true

@@ -7,6 +7,7 @@ class CreateContests < ActiveRecord::Migration[7.1]
       t.datetime :end_date, null: false, index: true
 
       t.timestamps
+      t.datetime :deleted_at, index: true
     end
 
     add_index :contests, :created_at

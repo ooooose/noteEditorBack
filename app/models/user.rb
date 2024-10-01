@@ -19,6 +19,10 @@ class User < ApplicationRecord
   # Association Layer
   has_many :pictures, dependent: :destroy
   has_many :themes, through: :pictures
+  has_many :likes, inverse_of: :user, dependent: :destroy
+  has_many :liked_pictures, through: :likes, source: :picture
+  has_many :comments, inverse_of: :user, dependent: :destroy
+  has_many :commented_pictures, through: :comments, source: :picture
 
   # Constants Layer
   enum role: { general: 1, admin: 9 }
@@ -54,5 +58,17 @@ class User < ApplicationRecord
   # Instance Method Layer
   def soft_destroy
     update!(deleted_at: Time.current)
+  end
+
+  def like(picture)
+    liked_pictures << picture
+  end
+
+  def unlike(picture)
+    liked_pictures.destroy(picture)
+  end
+
+  def liked?(picture)
+    picture.like_users.include?(self)
   end
 end
