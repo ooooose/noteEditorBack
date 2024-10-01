@@ -20,12 +20,11 @@ class Api::V1::ThemesController < ApplicationController
 
   private
 
-  def set_theme
-    @theme = Theme.find(params[:id])
-  end
+    def set_theme
+      @theme = Theme.find(params[:id])
+    end
 
-  def theme_params
-    params.require(:theme).permit(:title)
-  end
-
+    def theme_params
+      params.require(:theme).permit(:title)
+    end
 end

@@ -6,12 +6,12 @@ class UserPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.joins(:user).where(id: user.id )
+      scope.joins(:user).where(id: user.id)
     end
 
     private
 
-    attr_reader :user, :scope
+      attr_reader :user, :scope
   end
 
   # ユーザーがログインしているかどうかを確認
@@ -23,7 +23,7 @@ class UserPolicy < ApplicationPolicy
   def record_owner?
     record.user.id == user.id
   end
-  
+
   def show?
     general_check?
   end
@@ -33,6 +33,6 @@ class UserPolicy < ApplicationPolicy
   end
 
   def destroy?
-    general_check? && general_check? && (record_owner? || user.admin?)
+    general_check? && (record_owner? || user.admin?)
   end
 end

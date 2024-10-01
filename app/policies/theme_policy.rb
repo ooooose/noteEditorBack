@@ -14,7 +14,7 @@ class ThemePolicy < ApplicationPolicy
   def record_owner?
     record.user.id == user.id
   end
-  
+
   def show?
     general_check?
   end
