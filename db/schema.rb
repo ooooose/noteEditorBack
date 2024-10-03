@@ -40,7 +40,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_30_134410) do
     t.datetime "end_date", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
     t.index ["created_at"], name: "index_contests_on_created_at"
+    t.index ["deleted_at"], name: "index_contests_on_deleted_at"
     t.index ["end_date"], name: "index_contests_on_end_date"
     t.index ["start_date"], name: "index_contests_on_start_date"
     t.index ["title"], name: "unique_contest_title", unique: true
@@ -64,7 +66,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_30_134410) do
     t.integer "frame_id", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
     t.index ["created_at"], name: "index_pictures_on_created_at"
+    t.index ["deleted_at"], name: "index_pictures_on_deleted_at"
     t.index ["theme_id"], name: "index_pictures_on_theme_id"
     t.index ["uid"], name: "unique_picture_uid", unique: true
     t.index ["user_id", "theme_id"], name: "index_pictures_on_user_id_and_theme_id", unique: true
@@ -75,6 +79,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_30_134410) do
     t.string "title", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_themes_on_deleted_at"
     t.index ["title"], name: "unique_theme_title", unique: true
   end
 
@@ -87,6 +93,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_30_134410) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "unique_user_emails", unique: true
     t.index ["uid"], name: "unique_user_uid", unique: true
   end

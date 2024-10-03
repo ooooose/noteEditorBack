@@ -13,4 +13,9 @@ class Theme < ApplicationRecord
   has_many :pictures, -> { order(created_at: :desc) }, inverse_of: :theme, dependent: :destroy
 
   validates :title, presence: true, uniqueness: { case_sensitive: false }
+
+  # Instance Method Layer
+  def soft_destroy
+    update!(deleted_at: Time.current)
+  end
 end

@@ -4,6 +4,7 @@ class CreateThemes < ActiveRecord::Migration[7.1]
       t.string :title, null: false, index: { unique: true, name: 'unique_theme_title' }
 
       t.timestamps
+      t.datetime :deleted_at, index: true
     end
   end
 end

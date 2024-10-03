@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::API
+  include Pundit::Authorization
   include JwtAuthenticatable
   before_action :authenticate_request
 
