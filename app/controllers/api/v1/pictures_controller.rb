@@ -40,7 +40,7 @@ class Api::V1::PicturesController < ApplicationController
   private
 
     def set_picture
-      @picture = Picture.find(params[:id])
+      @picture = Picture.find_by(uid: params[:id])
     end
 
     def picture_params
