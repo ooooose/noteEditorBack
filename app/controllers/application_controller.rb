@@ -3,6 +3,10 @@ class ApplicationController < ActionController::API
   include JwtAuthenticatable
   before_action :authenticate_request
 
+  def encode_jwt(payload)
+    JWT.encode(payload, Rails.application.credentials.secret_key_base, "HS256")
+  end
+
   attr_reader :current_user
 
   private

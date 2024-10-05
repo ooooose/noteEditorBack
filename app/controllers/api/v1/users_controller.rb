@@ -12,7 +12,7 @@ class Api::V1::UsersController < ApplicationController
       @current_user.save!
     end
 
-    encoded_token = JwtService.encode(user_id: @current_user.id)
+    encoded_token = encode(user_id: @current_user.id)
 
     render json: { user: @current_user, accessToken: encoded_token, status: :ok }
   rescue => e
@@ -35,6 +35,6 @@ class Api::V1::UsersController < ApplicationController
   private
 
     def user_params
-      params.require(:user).permit(:email)
+      params.require(:user).permit(:name, :email, :image)
     end
 end
