@@ -18,7 +18,7 @@
 class User < ApplicationRecord
   # Association Layer
   has_many :pictures, dependent: :destroy
-  has_many :themes, through: :pictures
+  has_many :themes
   has_many :likes, inverse_of: :user, dependent: :destroy
   has_many :liked_pictures, through: :likes, source: :picture
   has_many :comments, inverse_of: :user, dependent: :destroy

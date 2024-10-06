@@ -1,10 +1,11 @@
 class Api::V1::PicturesController < ApplicationController
+  before_action :authenticate_request
   before_action :set_picture, only: %i[destroy]
 
   # GET /api/v1/pictures
   def index
-    current_user.pictures.includes(:users, :theme, :likes, :comments).order(created_at: :desc)
-    render json: pictures, each_serializer: PictureSerializer, status: :ok
+    pictures = current_user.pictures.includes(:users, :theme, :likes, :comments).order(created_at: :desc)
+    render json: PictureSerializer.new(pictures).serializable_hash, status: :ok
   end
 
   # POST /api/v1/pictures
@@ -40,7 +41,7 @@ class Api::V1::PicturesController < ApplicationController
   private
 
     def set_picture
-      @picture = Picture.find_by(uid: params[:id])
+      @picture = current_user.pictures.find_by(uid: params[:id])
     end
 
     def picture_params
