@@ -24,6 +24,7 @@ class Picture < ApplicationRecord
 
   validates :image_url, presence: true
   validates :frame_id, presence: true
+  validates :uid, presence: true, uniqueness: true
 
   def soft_destroy
     update!(deleted_at: Time.current)
