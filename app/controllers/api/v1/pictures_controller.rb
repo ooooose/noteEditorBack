@@ -13,9 +13,9 @@ class Api::V1::PicturesController < ApplicationController
     picture = current_user.pictures.build(picture_params)
     authorize picture
     if picture.save
-      render json: picture, status: :created
+      render json: PictureSerializer.new(picture).serializable_hash, status: :created
     else
-      render json: { error: picture.errors.full_messages.join(", ") }, status: :unprocessable_entity
+      render json: { errors: picture.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
@@ -45,6 +45,6 @@ class Api::V1::PicturesController < ApplicationController
     end
 
     def picture_params
-      params.require(:picture).permit(:image, :theme_id)
+      params.require(:picture).permit(:uid, :image_url, :theme_id, :frame_id)
     end
 end
