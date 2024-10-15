@@ -14,6 +14,6 @@ class Api::V1::LikesController < ApplicationController
   private
 
     def set_picture
-      @picture = Picture.find(params[:picture_id])
+      @picture = Picture.find_by(uid: params[:picture_id])
     end
 end

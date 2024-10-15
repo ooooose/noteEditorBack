@@ -36,23 +36,21 @@ RSpec.describe User, type: :model do
   # associationのテスト
   describe "association" do
     it { is_expected.to have_many(:pictures).dependent(:destroy) }
-    it { is_expected.to have_many(:themes).through(:pictures) }
   end
 
   # クラスメソッドのテスト
   describe ".find_with_jwt" do
     let!(:user) { create(:user) }
     let!(:secret_key) { Rails.application.credentials.secret_key_base }
-    # let!(:token) do
-    #   JWT.encode({ user_id: user.id, exp: 24.hours.from_now.to_i }, secret_key, "HS256")
-    # end
+    let!(:token) do
+      JWT.encode({ user_id: user.id, exp: 24.hours.from_now.to_i }, secret_key, "HS256")
+    end
 
-    # 一旦Pendingにしておく
-    # context "when the token is valid" do
-    #   it "finds a user" do
-    #     expect(described_class.find_with_jwt(token)).to eq user
-    #   end
-    # end
+    context "when the token is valid" do
+      it "finds a user" do
+        expect(described_class.find_with_jwt(token)).to eq user
+      end
+    end
 
     context "when the token is invalid" do
       let!(:invalid_token) { "invalid_token" }

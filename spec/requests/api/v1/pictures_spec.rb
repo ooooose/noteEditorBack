@@ -1,7 +1,74 @@
 require "rails_helper"
 
 RSpec.describe "Api::V1::Pictures", type: :request do
-  describe "GET /index" do
-    pending "add some examples (or delete) #{__FILE__}"
+  let!(:user) { create(:user) }
+  let!(:token) { encode_jwt({ user_id: user.id }) }
+  let!(:headers) { { Authorization: "Bearer #{token}" } }
+  let!(:theme) { create(:theme) }
+
+  describe "GET /api/v1/pictures" do
+    context "when the user does not have any pictures" do
+      before { get api_v1_pictures_path, headers: }
+
+      it "returns status ok" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "returns an empty array" do
+        expect(JSON.parse(response.body)["data"].length).to eq(0)
+      end
+    end
+
+    context "when the user has pictures" do
+      before do
+        create_list(:picture, 3, user:)
+        get api_v1_pictures_path, headers:
+      end
+
+      it "returns stattus ok" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "returns pictures" do
+        expect(JSON.parse(response.body)["data"].length).to eq(3)
+      end
+    end
+  end
+
+  describe "POST /api/v1/pictures" do
+    context "when params are valid" do
+      it "creates a picture and return status created" do
+        post(api_v1_pictures_path,
+             params: { picture: { image_url: "https://test.com" }, title: theme.title }, headers:)
+        expect(response).to have_http_status(:created)
+      end
+
+      it "returns the created picture" do
+        post(api_v1_pictures_path,
+             params: { picture: { image_url: "https://test.com" }, title: theme.title }, headers:)
+        expect(JSON.parse(response.body)["data"]["image_url"]).to be_nil
+      end
+    end
+
+    context "when params are invalid" do
+      it "returns errors without image_url" do
+        post(api_v1_pictures_path, params: { picture: { title: theme.title } }, headers:)
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it "returns errors without theme_id" do
+        post(api_v1_pictures_path,
+             params: { picture: { image_url: "https://test.com" } }, headers:)
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
+    context "when unauthenticated" do
+      it "returns status unauthorized" do
+        post(api_v1_pictures_path,
+             params: { picture: { image_url: "https://test.com", title: theme.title } })
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
   end
 end

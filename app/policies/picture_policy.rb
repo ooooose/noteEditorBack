@@ -15,6 +15,10 @@ class PicturePolicy < ApplicationPolicy
     record.user.id == user.id
   end
 
+  def create?
+    general_check?
+  end
+
   def show?
     general_check?
   end

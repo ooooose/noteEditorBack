@@ -7,16 +7,14 @@ class Api::V1::UsersController < ApplicationController
     @current_user = User.find_by(email: user_params[:email])
 
     if @current_user.nil?
-      ActiveRecord::Base.transaction do
-        @current_user = User.new(user_params)
-        @current_user.uid = SecureRandom.uuid
-        @current_user.save!
-      end
+      @current_user = User.new(user_params)
+      @current_user.uid = SecureRandom.uuid
+      @current_user.save!
     end
 
     encoded_token = encode(user_id: @current_user.id)
 
-    render json: { user: current_user, accessToken: encoded_token, status: :ok }
+    render json: { user: @current_user, accessToken: encoded_token, status: :ok }
   rescue => e
     render json: { error: "ログインに失敗しました: #{e.message}" }, status: :internal_server_error
   end
@@ -37,6 +35,6 @@ class Api::V1::UsersController < ApplicationController
   private
 
     def user_params
-      params.require(:user).permit(:email)
+      params.require(:user).permit(:name, :email, :image)
     end
 end
