@@ -14,13 +14,13 @@ class Api::V1::PicturesController < ApplicationController
 
     if theme.persisted?
       picture = current_user.pictures.build(
-        image_url: picture_params[:image_url], 
-        theme: theme,
+        image_url: picture_params[:image_url],
+        theme:,
         uid: SecureRandom.uuid
       )
-  
+
       authorize picture
-    
+
       if picture.save
         render json: PictureSerializer.new(picture).serializable_hash, status: :created
       else
