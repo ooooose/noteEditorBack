@@ -4,18 +4,30 @@ class Api::V1::PicturesController < ApplicationController
 
   # GET /api/v1/pictures
   def index
-    pictures = current_user.pictures.includes(:user, :theme, :likes, :comments).order(created_at: :desc)
+    pictures = current_user.pictures.order(created_at: :desc)
     render json: PictureSerializer.new(pictures).serializable_hash, status: :ok
   end
 
   # POST /api/v1/pictures
   def create
-    picture = current_user.pictures.build(picture_params)
-    authorize picture
-    if picture.save
-      render json: PictureSerializer.new(picture).serializable_hash, status: :created
+    theme = Theme.find_or_create_by(title: params[:title])
+
+    if theme.persisted?
+      picture = current_user.pictures.build(
+        image_url: picture_params[:image_url], 
+        theme: theme,
+        uid: SecureRandom.uuid
+      )
+  
+      authorize picture
+    
+      if picture.save
+        render json: PictureSerializer.new(picture).serializable_hash, status: :created
+      else
+        render json: { errors: picture.errors.full_messages }, status: :unprocessable_entity
+      end
     else
-      render json: { errors: picture.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: theme.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
@@ -45,6 +57,6 @@ class Api::V1::PicturesController < ApplicationController
     end
 
     def picture_params
-      params.require(:picture).permit(:uid, :image_url, :theme_id, :frame_id)
+      params.require(:picture).permit(:image_url, :frame_id)
     end
 end
