@@ -36,99 +36,45 @@ RSpec.describe "Api::V1::Pictures", type: :request do
   end
 
   describe "POST /api/v1/pictures" do
-   context "when authenticated" do
-      context "when params are valid" do
-        it "creates a picture and return status created" do
-          post(
-            api_v1_pictures_path, 
-            params: { 
-              picture: {
-                uid: "test_uid", 
-                image_url: "https://test.com", 
-                theme_id: theme.id,
-                frame_id: 0
-              }
-            },
-            headers: headers
-          )
-          expect(response).to have_http_status(:created)
-        end
-
-        it "creates a picture and return status created without frame_id is nil" do
-          post(
-            api_v1_pictures_path, 
-            params: { 
-              picture: {
-                uid: "test_uid", 
-                image_url: "https://test.com", 
-                theme_id: theme.id
-              }
-            },
-            headers: headers
-          )
-          expect(response).to have_http_status(:created)
-        end
-
-        it "returns the created picture" do
-          post(
-            api_v1_pictures_path, 
-            params: { 
-              picture: {
-                uid: "test_uid", 
-                image_url: "https://test.com", 
-                theme_id: theme.id
-              }
-            },
-            headers: headers
-          )
-          expect(JSON.parse(response.body)["data"]["image_url"]).to be_nil
-        end
+    context "when params are valid" do
+      it "creates a picture and return status created" do
+        post(api_v1_pictures_path,
+             params: { picture: { uid: "test_uid", image_url: "https://test.com", theme_id: theme.id,
+                                  frame_id: 0 } },
+             headers:)
+        expect(response).to have_http_status(:created)
       end
 
-      context "when params are invalid" do
-        it "returns errors without image_url" do
-          post(
-            api_v1_pictures_path,
-            params: {
-              picture: {
-                uid: "test_uid",
-                theme_id: theme.id
-              }
-            },
-            headers: headers
-          )
-          expect(response).to have_http_status(:unprocessable_entity)
-        end
-    
-        it "returns errors without theme_id" do
-          post(
-            api_v1_pictures_path,
-            params: {
-              picture: {
-                uid: "test_uid",
-                image_url: "https://test.com"
-              }
-            },
-            headers: headers
-          )
-          expect(response).to have_http_status(:unprocessable_entity)
-        end
+      it "creates a picture and return status created without frame_id is nil" do
+        post(api_v1_pictures_path,
+             params: { picture: { uid: "test_uid", image_url: "https://test.com", theme_id: theme.id } }, headers:)
+        expect(response).to have_http_status(:created)
+      end
+
+      it "returns the created picture" do
+        post(api_v1_pictures_path,
+             params: { picture: { uid: "test_uid", image_url: "https://test.com", theme_id: theme.id } }, headers:)
+        expect(JSON.parse(response.body)["data"]["image_url"]).to be_nil
+      end
+    end
+
+    context "when params are invalid" do
+      it "returns errors without image_url" do
+        post(api_v1_pictures_path, params: { picture: { uid: "test_uid", theme_id: theme.id } }, headers:)
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it "returns errors without theme_id" do
+        post(api_v1_pictures_path,
+             params: { picture: { uid: "test_uid", image_url: "https://test.com", frame_id: 0 } }, headers:)
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
 
     context "when unauthenticated" do
       it "returns status unauthorized" do
-        post(
-          api_v1_pictures_path, 
-          params: { 
-            picture: {
-              uid: "test_uid", 
-              image_url: "https://test.com", 
-              theme_id: theme.id,
-              frame_id: 0
-            }
-          },
-        )
+        post(api_v1_pictures_path,
+             params: { picture: { uid: "test_uid", image_url: "https://test.com", theme_id: theme.id, frame_id: 0 } })
         expect(response).to have_http_status(:unauthorized)
       end
     end

@@ -16,7 +16,7 @@ class PicturePolicy < ApplicationPolicy
   end
 
   def create?
-    general_check? 
+    general_check?
   end
 
   def show?
