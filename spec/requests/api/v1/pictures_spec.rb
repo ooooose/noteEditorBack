@@ -43,12 +43,6 @@ RSpec.describe "Api::V1::Pictures", type: :request do
         expect(response).to have_http_status(:created)
       end
 
-      it "creates a picture and return status created without frame_id is nil" do
-        post(api_v1_pictures_path,
-             params: { picture: { image_url: "https://test.com" }, title: theme.title }, headers:)
-        expect(response).to have_http_status(:created)
-      end
-
       it "returns the created picture" do
         post(api_v1_pictures_path,
              params: { picture: { image_url: "https://test.com" }, title: theme.title }, headers:)
