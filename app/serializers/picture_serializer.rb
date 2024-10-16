@@ -5,4 +5,5 @@ class PictureSerializer
 
   has_many :comments, serializer: CommentSerializer
   belongs_to :user, serializer: UserSerializer
+  belongs_to :theme, serializer: ThemeSerializer
 end
