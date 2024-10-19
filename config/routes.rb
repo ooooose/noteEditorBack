@@ -7,7 +7,7 @@ Rails.application.routes.draw do
       resources :pictures, only: %i[index show create update destroy] do
         resources :comments, only: %i[index show create update destroy]
       end
-      resources :likes, only: %i[create destroy]
+      resources :likes, param: :picture_uid, only: %i[create destroy]
     end
   end
 end
