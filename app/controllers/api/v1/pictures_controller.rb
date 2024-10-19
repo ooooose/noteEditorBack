@@ -4,7 +4,7 @@ class Api::V1::PicturesController < ApplicationController
 
   # GET /api/v1/pictures
   def index
-    pictures = current_user.pictures.order(created_at: :desc)
+    pictures = current_user.pictures.includes([:likes, :theme]).order(created_at: :desc)
     render json: PictureSerializer.new(pictures, include: [:user, :theme, :likes]).serializable_hash, status: :ok
   end
 

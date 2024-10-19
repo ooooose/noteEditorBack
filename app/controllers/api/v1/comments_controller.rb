@@ -3,11 +3,11 @@ class Api::V1::CommentsController < ApplicationController
 
   # GET /api/v1/comments
   def index
-    picture = Picture.find(params[:picture_id])
-    @comments = picture.comments
-    authorize @comments
+    picture = Picture.find_by(uid: params[:picture_uid])
+    comments = picture.comments
+    authorize comments
 
-    render json: @comments, each_serializer: CommentSerializer
+    render json: CommentSerializer.new(comments).serializable_hash, status: :ok
   end
 
   # POST /api/v1/comments
