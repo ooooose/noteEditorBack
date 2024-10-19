@@ -13,7 +13,7 @@ class Api::V1::LikesController < ApplicationController
     end
   end
 
-  # DELETE /api/v1/likes/:id
+  # DELETE /api/v1/likes/:picture_uid
   def destroy
     if @picture.nil?
       render json: { error: "Picture not found" }, status: :not_found
@@ -27,6 +27,7 @@ class Api::V1::LikesController < ApplicationController
   private
 
     def set_picture
+      Rails.logger.info("params[:picture_uid]: #{params[:picture_uid]}") 
       @picture = Picture.find_by(uid: params[:picture_uid])
     end
 end
