@@ -27,7 +27,7 @@ class Api::V1::LikesController < ApplicationController
   private
 
     def set_picture
-      Rails.logger.info("params[:picture_uid]: #{params[:picture_uid]}") 
+      Rails.logger.info("params[:picture_uid]: #{params[:picture_uid]}")
       @picture = Picture.find_by(uid: params[:picture_uid])
     end
 end
