@@ -1,4 +1,7 @@
 class CommentSerializer
   include JSONAPI::Serializer
-  attributes :id, :content, :created_at
+  attributes :id, :body, :created_at
+
+  belongs_to :user, serializer: UserSerializer
+  belongs_to :picture, serializer: PictureSerializer
 end

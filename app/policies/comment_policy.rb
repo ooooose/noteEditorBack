@@ -19,6 +19,10 @@ class CommentPolicy < ApplicationPolicy
     general_check?
   end
 
+  def create?
+    general_check?
+  end
+
   def show?
     general_check?
   end

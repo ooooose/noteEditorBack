@@ -1,16 +1,16 @@
 class Api::V1::CommentsController < ApplicationController
   before_action :set_comment, only: %i[destroy]
 
-  # GET /api/v1/comments
+  # GET /api/v1/pictures/:picture_id/comments
   def index
-    picture = Picture.find_by(uid: params[:picture_uid])
-    comments = picture.comments
+    picture = Picture.find(params[:picture_id])
+    comments = picture.comments.includes(:user).order(created_at: :desc)
     authorize comments
 
-    render json: CommentSerializer.new(comments).serializable_hash, status: :ok
+    render json: CommentSerializer.new(comments, options).serializable_hash, status: :ok
   end
 
-  # POST /api/v1/comments
+  # POST /api/v1/pictures/:picture_id/comments
   def create
     @comment = current_user.comments.build(comment_params)
     authorize @comment
@@ -38,5 +38,11 @@ class Api::V1::CommentsController < ApplicationController
 
     def comment_params
       params.require(:comment).permit(:body, :picture_id)
+    end
+
+    def options
+      options = {}
+      options[:include] = [:user]
+      options
     end
 end
