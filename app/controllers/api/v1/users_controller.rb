@@ -2,6 +2,11 @@ class Api::V1::UsersController < ApplicationController
   include JwtAuthenticatable
   skip_before_action :authenticate_request, only: %i[create]
 
+  # GET /api/v1/users/me
+  def me
+    render json: UserSerializer.new(current_user).serializable_hash.to_json, status: :ok
+  end
+
   # POST /api/v1/users
   def create
     @current_user = User.find_by(email: user_params[:email])
