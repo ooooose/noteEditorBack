@@ -15,6 +15,14 @@ class CommentPolicy < ApplicationPolicy
     record.user.id == user.id
   end
 
+  def index?
+    general_check?
+  end
+
+  def create?
+    general_check?
+  end
+
   def show?
     general_check?
   end
