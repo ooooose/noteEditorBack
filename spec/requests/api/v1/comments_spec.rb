@@ -7,10 +7,13 @@ RSpec.describe "Api::V1::Comments", type: :request do
   let!(:headers) { { Authorization: "Bearer #{token}" } }
 
   describe "GET api/v1/pictures/:picture_id/comments" do
-    let!(:comments) { create_list(:comment, 3, picture:) }
+    let(:comments) { create_list(:comment, 3, picture:) }
 
     context "when the user gets the comments of the picture" do
-      before { get api_v1_picture_comments_path(picture_id: picture.id), headers: }
+      before do
+        comments
+        get api_v1_picture_comments_path(picture_id: picture.id), headers:
+      end
 
       it "returns status ok" do
         expect(response).to have_http_status(:ok)
