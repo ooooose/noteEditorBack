@@ -2,8 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Api::V1::Comments", type: :request do
   let!(:user) { create(:user) }
-  let!(:theme) { create(:theme) }
-  let!(:picture) { create(:picture, theme:) }
+  let!(:picture) { create(:picture) }
   let!(:token) { encode_jwt({ user_id: user.id }) }
   let!(:headers) { { Authorization: "Bearer #{token}" } }
 
@@ -25,7 +24,9 @@ RSpec.describe "Api::V1::Comments", type: :request do
 
     context "when the user comments the picture with invalid params" do
       before {
-        post api_v1_picture_comments_path(picture_id: picture.id), params: { comment: { body: nil, picture_id: picture.id } },
+        post api_v1_picture_comments_path(picture_id: picture.id), params: {
+                                                                     comment: { body: nil, picture_id: picture.id },
+                                                                   },
                                                                    headers:
       }
 
