@@ -15,7 +15,7 @@ class Api::V1::CommentsController < ApplicationController
     @comment = current_user.comments.build(comment_params)
     authorize @comment
     if @comment.save
-      render json: @comment, status: :created
+      render json: { message: "Commented the picture" }, status: :created
     else
       render json: { error: @comment.errors.full_messages.join(", ") }, status: :unprocessable_entity
     end
