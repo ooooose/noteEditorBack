@@ -5,11 +5,12 @@ class Api::V1::UsersController < ApplicationController
   # GET /api/v1/users/me
   def me
     render json: UserSerializer.new(
-      current_user, 
+      current_user,
       include: [
-        :pictures, :'pictures.user', :'pictures.likes', :'pictures.comments', 
+        :pictures, :'pictures.user', :'pictures.likes', :'pictures.comments',
         :liked_pictures, :'liked_pictures.user', :'liked_pictures.likes', :'liked_pictures.comments'
-      ]).serializable_hash, status: :ok
+      ]
+    ).serializable_hash, status: :ok
   end
 
   # POST /api/v1/users

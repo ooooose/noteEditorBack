@@ -15,8 +15,10 @@ class ApplicationController < ActionController::API
       token = request.headers["Authorization"]&.split(" ")&.last
       decoded_token = decode(token)
       if decoded_token
-        if action_name == 'me'
-          @current_user = User.includes(pictures: [:likes, :comments], liked_pictures: [:likes, :comments]).find_by(id: decoded_token[:user_id])
+        if action_name == "me"
+          @current_user = User.includes(pictures: [:likes, :comments],
+                                        liked_pictures: [:likes,
+                                                         :comments]).find_by(id: decoded_token[:user_id])
         else
           @current_user = User.find_by(id: decoded_token[:user_id])
         end
