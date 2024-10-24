@@ -4,7 +4,12 @@ class Api::V1::UsersController < ApplicationController
 
   # GET /api/v1/users/me
   def me
-    render json: UserSerializer.new(current_user).serializable_hash.to_json, status: :ok
+    render json: UserSerializer.new(
+      current_user, 
+      include: [
+        :pictures, :'pictures.user', :'pictures.likes', :'pictures.comments', 
+        :liked_pictures, :'liked_pictures.user', :'liked_pictures.likes', :'liked_pictures.comments'
+      ]).serializable_hash, status: :ok
   end
 
   # POST /api/v1/users
