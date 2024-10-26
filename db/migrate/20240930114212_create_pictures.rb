@@ -11,7 +11,6 @@ class CreatePictures < ActiveRecord::Migration[7.1]
       t.datetime :deleted_at, index: true
     end
 
-    add_index :pictures, [:user_id, :theme_id], unique: true
     add_index :pictures, :created_at
   end
 end
