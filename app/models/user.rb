@@ -70,8 +70,4 @@ class User < ApplicationRecord
   def liked?(picture)
     picture.like_users.include?(self)
   end
-
-  def is_destroyed?
-    deleted_at.present?
-  end
 end
