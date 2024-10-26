@@ -55,7 +55,7 @@ class User < ApplicationRecord
   end
 
   # Instance Method Layer
-  def soft_destroy
+  def soft_destroy!
     update!(deleted_at: Time.current)
   end
 
@@ -69,5 +69,9 @@ class User < ApplicationRecord
 
   def liked?(picture)
     picture.like_users.include?(self)
+  end
+
+  def is_destroyed?
+    deleted_at.present?
   end
 end

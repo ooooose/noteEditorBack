@@ -15,7 +15,7 @@ class Api::V1::UsersController < ApplicationController
 
   # POST /api/v1/users
   def create
-    @current_user = User.find_by(email: user_params[:email])
+    @current_user = User.without_soft_destroyed.find_by(email: user_params[:email])
 
     if @current_user.nil?
       @current_user = User.new(user_params)
@@ -37,7 +37,7 @@ class Api::V1::UsersController < ApplicationController
 
   # DELETE /api/v1/users/:id
   def destroy
-    current_user.soft_destroy
+    current_user.soft_destroy!
     render json: { message: "ユーザーを削除しました" }, status: :ok
   rescue => e
     render json: { error: "ユーザーの削除に失敗しました: #{e.message}" }, status: :internal_server_error
