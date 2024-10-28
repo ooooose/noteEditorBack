@@ -2,7 +2,7 @@ class Api::V1::UsersController < ApplicationController
   include JwtAuthenticatable
   skip_before_action :authenticate_request, only: %i[create]
 
-  # GET /api/v1/users/me
+  # GET /api/v1/users/profile
   def me
     render json: UserSerializer.new(
       current_user,
@@ -11,6 +11,14 @@ class Api::V1::UsersController < ApplicationController
         :liked_pictures, :'liked_pictures.user', :'liked_pictures.likes', :'liked_pictures.comments'
       ]
     ).serializable_hash, status: :ok
+  end
+
+  # PATCH /api/v1/users/profile
+  def update_profile
+    current_user.update!(user_params)
+    render json: UserSerializer.new(current_user).serializable_hash, status: :ok
+  rescue => e
+    render json: { error: "プロフィールの更新に失敗しました: #{e.message}" }, status: :internal_server_error
   end
 
   # POST /api/v1/users
