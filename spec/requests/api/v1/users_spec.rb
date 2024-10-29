@@ -39,9 +39,9 @@ RSpec.describe User, type: :request do
 
     context "when valid request" do
       before do
-        get "/api/v1/users/me", headers: headers
+        get "/api/v1/users/me", headers:
       end
-      
+
       it "returns status ok" do
         expect(response).to have_http_status(:ok)
       end
@@ -50,6 +50,7 @@ RSpec.describe User, type: :request do
         expect(JSON.parse(response.body)["data"]["attributes"]["email"]).to eq(user.email)
       end
     end
+
     context "when invalid request" do
       before do
         get "/api/v1/users/me"
@@ -72,7 +73,7 @@ RSpec.describe User, type: :request do
 
     context "when valid request without image" do
       before do
-        patch "/api/v1/users/profile", params: { user: { name: "new_name" } }, headers: headers
+        patch "/api/v1/users/profile", params: { user: { name: "new_name" } }, headers:
       end
 
       it "returns status ok" do
@@ -80,13 +81,13 @@ RSpec.describe User, type: :request do
       end
 
       it "updates the user" do
-        expect(User.find(user.id).name).to eq("new_name")
+        expect(described_class.find(user.id).name).to eq("new_name")
       end
     end
 
     context "when valid request with image" do
       before do
-        patch "/api/v1/users/profile", params: { user: { name: "new_name", image: "files/test.jpg" } }, headers: headers
+        patch "/api/v1/users/profile", params: { user: { name: "new_name", image: "files/test.jpg" } }, headers:
       end
 
       it "returns status ok" do
@@ -94,13 +95,13 @@ RSpec.describe User, type: :request do
       end
 
       it "updates the user" do
-        expect(User.find(user.id).name).to eq("new_name")
+        expect(described_class.find(user.id).name).to eq("new_name")
       end
     end
 
     context "when valid request without name" do
       before do
-        patch "/api/v1/users/profile", params: { user: { image: "files/test.jpg" } }, headers: headers
+        patch "/api/v1/users/profile", params: { user: { image: "files/test.jpg" } }, headers:
       end
 
       it "returns status ok" do
@@ -108,13 +109,13 @@ RSpec.describe User, type: :request do
       end
 
       it "updates the user" do
-        expect(User.find(user.id).image).to eq("files/test.jpg")
-      end 
+        expect(described_class.find(user.id).image).to eq("files/test.jpg")
+      end
     end
 
     context "when invalid request" do
       before do
-        patch "/api/v1/users/profile", params: { user: { name: nil } }, headers: headers
+        patch "/api/v1/users/profile", params: { user: { name: nil } }, headers:
       end
 
       it "returns internal_server_error status" do
