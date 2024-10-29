@@ -55,7 +55,7 @@ class User < ApplicationRecord
   end
 
   # Instance Method Layer
-  def soft_destroy
+  def soft_destroy!
     update!(deleted_at: Time.current)
   end
 

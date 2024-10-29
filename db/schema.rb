@@ -29,7 +29,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_30_134410) do
     t.text "body", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_comments_on_created_at"
     t.index ["picture_id"], name: "index_comments_on_picture_id"
+    t.index ["user_id", "picture_id"], name: "index_comments_on_user_id_and_picture_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
@@ -71,7 +73,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_30_134410) do
     t.index ["deleted_at"], name: "index_pictures_on_deleted_at"
     t.index ["theme_id"], name: "index_pictures_on_theme_id"
     t.index ["uid"], name: "unique_picture_uid", unique: true
-    t.index ["user_id", "theme_id"], name: "index_pictures_on_user_id_and_theme_id", unique: true
     t.index ["user_id"], name: "index_pictures_on_user_id"
   end
 

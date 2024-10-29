@@ -2,14 +2,28 @@ class Api::V1::UsersController < ApplicationController
   include JwtAuthenticatable
   skip_before_action :authenticate_request, only: %i[create]
 
-  # GET /api/v1/users/me
+  # GET /api/v1/users/profile
   def me
-    render json: UserSerializer.new(current_user).serializable_hash.to_json, status: :ok
+    render json: UserSerializer.new(
+      current_user,
+      include: [
+        :pictures, :'pictures.user', :'pictures.likes', :'pictures.comments',
+        :liked_pictures, :'liked_pictures.user', :'liked_pictures.likes', :'liked_pictures.comments'
+      ]
+    ).serializable_hash, status: :ok
+  end
+
+  # PATCH /api/v1/users/profile
+  def update_profile
+    current_user.update!(user_params)
+    render json: UserSerializer.new(current_user).serializable_hash, status: :ok
+  rescue => e
+    render json: { error: "プロフィールの更新に失敗しました: #{e.message}" }, status: :internal_server_error
   end
 
   # POST /api/v1/users
   def create
-    @current_user = User.find_by(email: user_params[:email])
+    @current_user = User.without_soft_destroyed.find_by(email: user_params[:email])
 
     if @current_user.nil?
       @current_user = User.new(user_params)
@@ -31,7 +45,7 @@ class Api::V1::UsersController < ApplicationController
 
   # DELETE /api/v1/users/:id
   def destroy
-    current_user.soft_destroy
+    current_user.soft_destroy!
     render json: { message: "ユーザーを削除しました" }, status: :ok
   rescue => e
     render json: { error: "ユーザーの削除に失敗しました: #{e.message}" }, status: :internal_server_error

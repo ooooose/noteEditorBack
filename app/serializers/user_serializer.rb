@@ -4,4 +4,5 @@ class UserSerializer
   attributes :name, :email, :image
 
   has_many :pictures, serializer: PictureSerializer
+  has_many :liked_pictures, serializer: PictureSerializer
 end

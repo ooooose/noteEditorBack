@@ -70,4 +70,29 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe ".without_soft_destroyed" do
+    let!(:users) { create_list(:user, 3) }
+
+    context "when there are soft destroyed users" do
+      before do
+        users.first.soft_destroy!
+      end
+
+      it "returns only users that are not soft destroyed" do
+        expect(described_class.without_soft_destroyed.size).to eq 2
+      end
+    end
+  end
+
+  describe ".soft_destroy!" do
+    let!(:user) { create(:user) }
+
+    context "when fill in the deleted_at column" do
+      it "is soft destroyed" do
+        user.soft_destroy!
+        expect(user.deleted_at).not_to be_nil
+      end
+    end
+  end
 end
