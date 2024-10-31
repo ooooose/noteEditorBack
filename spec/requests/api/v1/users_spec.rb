@@ -66,14 +66,14 @@ RSpec.describe User, type: :request do
     end
   end
 
-  describe "PATCH /api/v1/users/profile" do
+  describe "PUT /api/v1/users/profile" do
     let!(:user) { create(:user) }
     let!(:token) { encode_jwt({ user_id: user.id }) }
     let!(:headers) { { Authorization: "Bearer #{token}" } }
 
     context "when valid request without image" do
       before do
-        patch "/api/v1/users/profile", params: { user: { name: "new_name" } }, headers:
+        put "/api/v1/users/profile", params: { user: { name: "new_name" } }, headers:
       end
 
       it "returns status ok" do
@@ -87,7 +87,7 @@ RSpec.describe User, type: :request do
 
     context "when valid request with image" do
       before do
-        patch "/api/v1/users/profile", params: { user: { name: "new_name", image: "files/test.jpg" } }, headers:
+        put "/api/v1/users/profile", params: { user: { name: "new_name", image: "files/test.jpg" } }, headers:
       end
 
       it "returns status ok" do
@@ -101,7 +101,7 @@ RSpec.describe User, type: :request do
 
     context "when valid request without name" do
       before do
-        patch "/api/v1/users/profile", params: { user: { image: "files/test.jpg" } }, headers:
+        put "/api/v1/users/profile", params: { user: { image: "files/test.jpg" } }, headers:
       end
 
       it "returns status ok" do
@@ -115,7 +115,7 @@ RSpec.describe User, type: :request do
 
     context "when invalid request" do
       before do
-        patch "/api/v1/users/profile", params: { user: { name: nil } }, headers:
+        put "/api/v1/users/profile", params: { user: { name: nil } }, headers:
       end
 
       it "returns internal_server_error status" do
