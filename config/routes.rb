@@ -5,7 +5,7 @@ Rails.application.routes.draw do
       resources :users, only: %i[create show destroy] do
         collection do
           get 'me', to: 'users#me'
-          patch 'profile', to: 'users#update_profile'
+          put 'profile', to: 'users#update_profile'
         end
       end
       resources :themes, only: %i[index show create update destroy]
