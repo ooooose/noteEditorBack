@@ -1,15 +1,15 @@
 require "rails_helper"
 
 RSpec.describe "Api::V1::Themes", type: :request do
-  let!(:user) { create(:user) }
-  let!(:token) { encode_jwt({ user_id: user.id }) }
-  let!(:headers) { { Authorization: "Bearer #{token}" } }
+  let(:user) { create(:user) }
+  let(:token) { encode_jwt({ user_id: user.id }) }
+  let(:headers) { { Authorization: "Bearer #{token}" } }
 
   describe "GET /api/v1/themes" do
-    let!(:themes) { create_list(:theme, 3) }
+    before { create_list(:theme, 3) }
 
     context "when the user gets the themes" do
-      before { get api_v1_themes_path, headers: headers }
+      before { get api_v1_themes_path, headers: }
 
       it "returns status ok" do
         expect(response).to have_http_status(:ok)
