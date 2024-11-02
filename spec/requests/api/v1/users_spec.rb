@@ -127,4 +127,72 @@ RSpec.describe User, type: :request do
       end
     end
   end
+
+  describe "GET /api/v1/users/:id/pictures" do
+    let!(:user) { create(:user) }
+    let!(:token) { encode_jwt({ user_id: user.id }) }
+    let!(:headers) { { Authorization: "Bearer #{token}" } }
+    let!(:theme) { create(:theme) }
+
+    before do
+      create_list(:picture, 3, user:, theme:)
+      get "/api/v1/users/#{user.uid}/pictures", headers:
+    end
+
+    context "when valid request" do
+      it "returns status ok" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "returns pictures" do
+        expect(JSON.parse(response.body)["data"].length).to eq(3)
+      end
+    end
+
+    context "when unauthorized request" do
+      before do
+        get "/api/v1/users/#{user.uid}/pictures"
+      end
+
+      it "returns unauthorized status" do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
+  describe "GET /api/v1/users/:id/liked_pictures" do
+    let(:user) { create(:user) }
+    let(:token) { encode_jwt({ user_id: user.id }) }
+    let(:headers) { { Authorization: "Bearer #{token}" } }
+
+    before do
+      theme = create(:theme)
+      picture = create(:picture, theme:)
+      create(:like, user:, picture:)
+    end
+
+    context "when valid request" do
+      before do
+        get "/api/v1/users/#{user.uid}/liked_pictures", headers:
+      end
+
+      it "returns status ok" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "returns pictures" do
+        expect(JSON.parse(response.body)["data"].length).to eq(1)
+      end
+    end
+
+    context "when unauthorized request" do
+      before do
+        get "/api/v1/users/#{user.uid}/liked_pictures"
+      end
+
+      it "returns not_fouunauthorizednd status" do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
 end
