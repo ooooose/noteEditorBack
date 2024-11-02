@@ -66,14 +66,14 @@ RSpec.describe User, type: :request do
     end
   end
 
-  describe "PATCH /api/v1/users/profile" do
+  describe "PUT /api/v1/users/profile" do
     let!(:user) { create(:user) }
     let!(:token) { encode_jwt({ user_id: user.id }) }
     let!(:headers) { { Authorization: "Bearer #{token}" } }
 
     context "when valid request without image" do
       before do
-        patch "/api/v1/users/profile", params: { user: { name: "new_name" } }, headers:
+        put "/api/v1/users/profile", params: { user: { name: "new_name" } }, headers:
       end
 
       it "returns status ok" do
@@ -87,7 +87,7 @@ RSpec.describe User, type: :request do
 
     context "when valid request with image" do
       before do
-        patch "/api/v1/users/profile", params: { user: { name: "new_name", image: "files/test.jpg" } }, headers:
+        put "/api/v1/users/profile", params: { user: { name: "new_name", image: "files/test.jpg" } }, headers:
       end
 
       it "returns status ok" do
@@ -101,7 +101,7 @@ RSpec.describe User, type: :request do
 
     context "when valid request without name" do
       before do
-        patch "/api/v1/users/profile", params: { user: { image: "files/test.jpg" } }, headers:
+        put "/api/v1/users/profile", params: { user: { image: "files/test.jpg" } }, headers:
       end
 
       it "returns status ok" do
@@ -115,7 +115,7 @@ RSpec.describe User, type: :request do
 
     context "when invalid request" do
       before do
-        patch "/api/v1/users/profile", params: { user: { name: nil } }, headers:
+        put "/api/v1/users/profile", params: { user: { name: nil } }, headers:
       end
 
       it "returns internal_server_error status" do
@@ -124,6 +124,74 @@ RSpec.describe User, type: :request do
 
       it "returns error messages" do
         expect(JSON.parse(response.body)["error"]).to include("プロフィールの更新に失敗しました")
+      end
+    end
+  end
+
+  describe "GET /api/v1/users/:id/pictures" do
+    let!(:user) { create(:user) }
+    let!(:token) { encode_jwt({ user_id: user.id }) }
+    let!(:headers) { { Authorization: "Bearer #{token}" } }
+    let!(:theme) { create(:theme) }
+
+    before do
+      create_list(:picture, 3, user:, theme:)
+      get "/api/v1/users/#{user.uid}/pictures", headers:
+    end
+
+    context "when valid request" do
+      it "returns status ok" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "returns pictures" do
+        expect(JSON.parse(response.body)["data"].length).to eq(3)
+      end
+    end
+
+    context "when unauthorized request" do
+      before do
+        get "/api/v1/users/#{user.uid}/pictures"
+      end
+
+      it "returns unauthorized status" do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
+  describe "GET /api/v1/users/:id/liked_pictures" do
+    let(:user) { create(:user) }
+    let(:token) { encode_jwt({ user_id: user.id }) }
+    let(:headers) { { Authorization: "Bearer #{token}" } }
+
+    before do
+      theme = create(:theme)
+      picture = create(:picture, theme:)
+      create(:like, user:, picture:)
+    end
+
+    context "when valid request" do
+      before do
+        get "/api/v1/users/#{user.uid}/liked_pictures", headers:
+      end
+
+      it "returns status ok" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "returns pictures" do
+        expect(JSON.parse(response.body)["data"].length).to eq(1)
+      end
+    end
+
+    context "when unauthorized request" do
+      before do
+        get "/api/v1/users/#{user.uid}/liked_pictures"
+      end
+
+      it "returns not_fouunauthorizednd status" do
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end
