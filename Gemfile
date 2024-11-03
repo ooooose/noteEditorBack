@@ -8,7 +8,7 @@ gem "pg", "~> 1.4"
 
 gem "puma", ">= 5.0"
 
-gem "tzinfo-data", platforms: %i[windows jruby]
+gem "tzinfo-data", platforms: %i[mswin mingw x64_mingw jruby]
 
 gem "bootsnap", require: false
 
