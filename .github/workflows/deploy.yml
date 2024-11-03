@@ -25,7 +25,7 @@ jobs:
 
       - name: publish
         run: |
-          docker build -t registry.heroku.com/$APP_NAME -f Dockerfile.prod .
-          docker push registry.heroku.com/$APP_NAME
+          docker build -t registry.heroku.com/$APP_NAME/web -f Dockerfile.prod .
+          docker push registry.heroku.com/$APP_NAME/web
           heroku container:release web -a $APP_NAME
           heroku run bin/rails db:migrate RAILS_ENV=production -a $APP_NAME
