@@ -22,6 +22,8 @@ gem "jwt"
 
 gem "pundit"
 
+gem 'pagy'
+
 gem "base64"
 gem "bigdecimal"
 gem "drb"
