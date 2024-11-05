@@ -2,6 +2,11 @@ class ApplicationController < ActionController::API
   include Pundit::Authorization
   include JwtAuthenticatable
   before_action :authenticate_request
+  skip_before_action :authenticate_request, only: %i[health_check]
+
+  def health_check
+    render json: { status: 'ok', message: 'Application is running smoothly' }, status: :ok
+  end
 
   def encode_jwt(payload)
     JWT.encode(payload, Rails.application.credentials.secret_key_base, "HS256")
