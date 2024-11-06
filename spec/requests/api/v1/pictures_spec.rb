@@ -15,7 +15,7 @@ RSpec.describe "Api::V1::Pictures", type: :request do
       end
 
       it "returns an empty array" do
-        expect(JSON.parse(response.body)["data"].length).to eq(0)
+        expect(JSON.parse(response.body)["pictures"]["data"].length).to eq(0)
       end
     end
 
@@ -30,7 +30,7 @@ RSpec.describe "Api::V1::Pictures", type: :request do
       end
 
       it "returns pictures" do
-        expect(JSON.parse(response.body)["data"].length).to eq(3)
+        expect(JSON.parse(response.body)["pictures"]["data"].length).to eq(3)
       end
     end
   end
