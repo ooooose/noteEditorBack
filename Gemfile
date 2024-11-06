@@ -22,7 +22,7 @@ gem "jwt"
 
 gem "pundit"
 
-gem 'pagy'
+gem "pagy"
 
 gem "base64"
 gem "bigdecimal"

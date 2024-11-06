@@ -4,7 +4,7 @@ class Api::V1::PicturesController < ApplicationController
 
   # GET /api/v1/pictures
   def index
-    pagy, pictures = pagy(current_user.pictures.includes([:likes, :theme]).order(created_at: :desc))
+    _, pictures = pagy(current_user.pictures.includes([:likes, :theme]).order(created_at: :desc))
     expires_in 1.hour, public: true
     render json: {
       pictures: PictureSerializer.new(pictures, include: [:user, :theme, :likes]).serializable_hash,

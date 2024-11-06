@@ -6,7 +6,7 @@ class ApplicationController < ActionController::API
   skip_before_action :authenticate_request, only: %i[health_check]
 
   def health_check
-    render json: { status: 'ok', message: 'Application is running smoothly' }, status: :ok
+    render json: { status: "ok", message: "Application is running smoothly" }, status: :ok
   end
 
   def encode_jwt(payload)
