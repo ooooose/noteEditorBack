@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::API
   include Pundit::Authorization
   include JwtAuthenticatable
+  include Pagy::Backend
   before_action :authenticate_request
   skip_before_action :authenticate_request, only: %i[health_check]
 
