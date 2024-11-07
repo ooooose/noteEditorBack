@@ -40,13 +40,15 @@ class Api::V1::UsersController < ApplicationController
 
   # GET /api/v1/users/:uid/pictures
   def pictures
-    pictures = @user.pictures.includes([:likes, :theme, :comments]).order(created_at: :desc)
+    pictures = @user.pictures.includes([:likes, :theme]).order(created_at: :desc)
+    expires_in 4.hour, public: true
     render json: PictureSerializer.new(pictures, include: [:user, :theme, :likes]).serializable_hash, status: :ok
   end
 
   # GET /api/v1/users/:uid/liked_pictures
   def liked_pictures
-    pictures = @user.liked_pictures.includes([:likes, :theme, :comments]).order(created_at: :desc)
+    pictures = @user.liked_pictures.includes([:likes, :theme, :user]).order(created_at: :desc)
+    expires_in 4.hour, public: true
     render json: PictureSerializer.new(pictures, include: [:user, :theme, :likes]).serializable_hash, status: :ok
   end
 
