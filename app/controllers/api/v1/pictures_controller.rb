@@ -1,4 +1,4 @@
-require 'pagy/extras/metadata'
+require "pagy/extras/metadata"
 
 class Api::V1::PicturesController < ApplicationController
   before_action :authenticate_request
@@ -10,7 +10,7 @@ class Api::V1::PicturesController < ApplicationController
     expires_in 4.hour, public: true
     render json: {
       pictures: PictureSerializer.new(pictures, include: [:user, :theme, :likes]).serializable_hash,
-      pagy: pagy_metadata(pagy)
+      pagy: pagy_metadata(pagy),
     }, status: :ok
   end
 
