@@ -6,7 +6,6 @@ class Api::V1::CommentsController < ApplicationController
     picture = Picture.find(params[:picture_id])
     comments = picture.comments.includes(:user).order(created_at: :desc)
     authorize comments
-    expires_in 4.hour, public: true
     render json: CommentSerializer.new(comments, options).serializable_hash, status: :ok
   end
 

@@ -1,3 +1,5 @@
+require "pagy/extras/metadata"
+
 class Api::V1::UsersController < ApplicationController
   include JwtAuthenticatable
   skip_before_action :authenticate_request, only: %i[create]
@@ -40,16 +42,20 @@ class Api::V1::UsersController < ApplicationController
 
   # GET /api/v1/users/:uid/pictures
   def pictures
-    pictures = @user.pictures.includes([:likes, :theme]).order(created_at: :desc)
-    expires_in 4.hour, public: true
-    render json: PictureSerializer.new(pictures, include: [:user, :theme, :likes]).serializable_hash, status: :ok
+    pagy, pictures = pagy(@user.pictures.includes([:likes, :theme]).order(created_at: :desc))
+    render json: { 
+      pictures: PictureSerializer.new(pictures, include: [:user, :theme, :likes]).serializable_hash,
+      pagy: pagy_metadata(pagy)
+    }, status: :ok
   end
 
   # GET /api/v1/users/:uid/liked_pictures
   def liked_pictures
-    pictures = @user.liked_pictures.includes([:likes, :theme, :user]).order(created_at: :desc)
-    expires_in 4.hour, public: true
-    render json: PictureSerializer.new(pictures, include: [:user, :theme, :likes]).serializable_hash, status: :ok
+    pagy, pictures = pagy(@user.liked_pictures.includes([:likes, :theme, :user]).order(created_at: :desc))
+    render json: { 
+      pictures: PictureSerializer.new(pictures, include: [:user, :theme, :likes]).serializable_hash,
+      pagy: pagy_metadata(pagy)
+    }, status: :ok
   end
 
   # DELETE /api/v1/users/:uid
