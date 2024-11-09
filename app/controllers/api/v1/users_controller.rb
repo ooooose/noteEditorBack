@@ -43,18 +43,18 @@ class Api::V1::UsersController < ApplicationController
   # GET /api/v1/users/:uid/pictures
   def pictures
     pagy, pictures = pagy(@user.pictures.includes([:likes, :theme]).order(created_at: :desc))
-    render json: { 
+    render json: {
       pictures: PictureSerializer.new(pictures, include: [:user, :theme, :likes]).serializable_hash,
-      pagy: pagy_metadata(pagy)
+      pagy: pagy_metadata(pagy),
     }, status: :ok
   end
 
   # GET /api/v1/users/:uid/liked_pictures
   def liked_pictures
     pagy, pictures = pagy(@user.liked_pictures.includes([:likes, :theme, :user]).order(created_at: :desc))
-    render json: { 
+    render json: {
       pictures: PictureSerializer.new(pictures, include: [:user, :theme, :likes]).serializable_hash,
-      pagy: pagy_metadata(pagy)
+      pagy: pagy_metadata(pagy),
     }, status: :ok
   end
 
