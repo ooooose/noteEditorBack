@@ -145,7 +145,7 @@ RSpec.describe User, type: :request do
       end
 
       it "returns pictures" do
-        expect(JSON.parse(response.body)["data"].length).to eq(3)
+        expect(JSON.parse(response.body)["pictures"]["data"].length).to eq(3)
       end
     end
 
@@ -181,7 +181,7 @@ RSpec.describe User, type: :request do
       end
 
       it "returns pictures" do
-        expect(JSON.parse(response.body)["data"].length).to eq(1)
+        expect(JSON.parse(response.body)["pictures"]["data"].length).to eq(1)
       end
     end
 

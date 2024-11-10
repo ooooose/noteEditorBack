@@ -5,6 +5,7 @@ class Api::V1::ThemesController < ApplicationController
   # GET /api/v1/themes
   def index
     themes = Theme.all
+    expires_in 4.hour, public: true
     render json: ThemeSerializer.new(themes).serializable_hash, status: :ok
   end
 
