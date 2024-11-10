@@ -19,7 +19,7 @@ jobs:
       - name: Set up ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.3.5"
+          ruby-version: "3.3.6"
       - name: Docker build
         run: docker login --username=$USERNAME --password=$HEROKU_API_KEY registry.heroku.com
 
