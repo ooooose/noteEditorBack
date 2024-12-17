@@ -71,4 +71,21 @@ RSpec.describe "Api::V1::Pictures", type: :request do
       end
     end
   end
+
+  describe "GET /api/v1/pictures/top_pictures" do
+    context "when there are pictures" do
+      before do
+        create_list(:picture, 8, user:)
+        get "/api/v1/pictures/top_pictures"
+      end
+
+      it "returns status ok" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "returns top pictures" do
+        expect(JSON.parse(response.body)["data"].length).to eq(6)
+      end
+    end
+  end
 end

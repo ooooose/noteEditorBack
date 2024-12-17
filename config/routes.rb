@@ -18,6 +18,10 @@ Rails.application.routes.draw do
       resources :themes, only: %i[index show create update destroy]
       resources :pictures, only: %i[index create update destroy] do
         resources :comments, only: %i[index show create update destroy]
+
+        collection do
+          get 'top_pictures', to: 'pictures#top_pictures'
+        end
       end
 
       resources :likes, param: :picture_uid, only: %i[create destroy]
