@@ -15,6 +15,8 @@ Rails.application.routes.draw do
         end
       end
 
+      get 'users/top', to: 'users#top'
+
       resources :themes, only: %i[index show create update destroy]
       resources :pictures, only: %i[index create update destroy] do
         resources :comments, only: %i[index show create update destroy]

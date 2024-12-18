@@ -195,4 +195,49 @@ RSpec.describe User, type: :request do
       end
     end
   end
+
+  describe 'GET /api/v1/top_users' do
+    let!(:user1) { create(:user) }
+    let!(:user2) { create(:user) }
+    let!(:user3) { create(:user) }
+    let!(:user4) { create(:user) }
+
+    before do
+      create_list(:like, 10, user: user1)
+      create_list(:like, 7, user: user2)
+      create_list(:like, 5, user: user3)
+      create_list(:like, 2, user: user4)
+    end
+
+    it 'returns the top 3 users by likes' do
+      get '/api/v1/users/top'
+
+      expect(response).to have_http_status(:ok)
+
+      json = JSON.parse(response.body, symbolize_names: true)
+
+      expect(json.size).to eq(3)
+
+      expect(json[0][:id]).to eq(user1.id)
+      expect(json[0][:likes_count]).to eq(10)
+
+      expect(json[1][:id]).to eq(user2.id)
+      expect(json[1][:likes_count]).to eq(7)
+
+      expect(json[2][:id]).to eq(user3.id)
+      expect(json[2][:likes_count]).to eq(5)
+    end
+
+    it 'returns an empty array if there are no likes' do
+      Like.delete_all
+
+      get '/api/v1/users/top'
+
+      expect(response).to have_http_status(:ok)
+
+      json = JSON.parse(response.body, symbolize_names: true)
+
+      expect(json).to eq([])
+    end
+  end
 end

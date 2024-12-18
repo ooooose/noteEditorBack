@@ -2,7 +2,7 @@ require "pagy/extras/metadata"
 
 class Api::V1::UsersController < ApplicationController
   include JwtAuthenticatable
-  skip_before_action :authenticate_request, only: %i[create]
+  skip_before_action :authenticate_request, only: %i[create top]
   before_action :set_user, only: %i[pictures liked_pictures]
 
   # GET /api/v1/users/profile
@@ -64,6 +64,17 @@ class Api::V1::UsersController < ApplicationController
     render json: { message: "ユーザーを削除しました" }, status: :ok
   rescue => e
     render json: { error: "ユーザーの削除に失敗しました: #{e.message}" }, status: :internal_server_error
+  end
+
+  # GET /api/v1/users/top
+  def top
+    top_users = User.joins(:likes)
+                    .select('users.*, COUNT(likes.id) AS likes_count')
+                    .group('users.id')
+                    .order('likes_count DESC')
+                    .limit(3)
+
+    render json: UserSerializer.new(top_users).serializable_hash, status: :ok
   end
 
   private
