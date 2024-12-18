@@ -72,11 +72,11 @@ RSpec.describe "Api::V1::Pictures", type: :request do
     end
   end
 
-  describe "GET /api/v1/pictures/top_pictures" do
+  describe "GET /api/v1/pictures/top" do
     context "when there are pictures" do
       before do
         create_list(:picture, 8, user:)
-        get "/api/v1/pictures/top_pictures"
+        get "/api/v1/pictures/top"
       end
 
       it "returns status ok" do

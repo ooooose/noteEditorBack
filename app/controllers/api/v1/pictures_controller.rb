@@ -1,7 +1,7 @@
 require "pagy/extras/metadata"
 
 class Api::V1::PicturesController < ApplicationController
-  before_action :authenticate_request, except: :top_pictures
+  before_action :authenticate_request, except: :top
   before_action :set_picture, only: %i[destroy]
 
   # GET /api/v1/pictures
@@ -55,8 +55,8 @@ class Api::V1::PicturesController < ApplicationController
     render json: { error: "Failed to delete picture: #{e.message}" }, status: :internal_server_error
   end
 
-  # GET /api/v1/pictures/top_pictures
-  def top_pictures
+  # GET /api/v1/pictures/top
+  def top
     pictures = Picture.includes(:likes, :user, :theme).order(created_at: :desc).limit(6)
     render json: PictureSerializer.new(pictures).serializable_hash, status: :ok
   end

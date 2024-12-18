@@ -20,7 +20,7 @@ Rails.application.routes.draw do
         resources :comments, only: %i[index show create update destroy]
 
         collection do
-          get 'top_pictures', to: 'pictures#top_pictures'
+          get 'top', to: 'pictures#top'
         end
       end
 
