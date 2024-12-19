@@ -68,11 +68,11 @@ class Api::V1::UsersController < ApplicationController
 
   # GET /api/v1/users/top
   def top
-    top_users = User.joins(:pictures)
-                    .select('users.*, COUNT(pictures.id) AS total_pictures_count')
-                    .group('users.id')
-                    .order('total_pictures_count DESC')
-                    .limit(3)
+    top_users = User.joins(:pictures).
+                  select("users.*, COUNT(pictures.id) AS total_pictures_count").
+                  group("users.id").
+                  order("total_pictures_count DESC").
+                  limit(3)
 
     render json: UserSerializer.new(top_users).serializable_hash, status: :ok
   rescue => e

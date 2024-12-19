@@ -197,17 +197,17 @@ RSpec.describe User, type: :request do
   end
 
   describe "GET /api/v1/pictures/top" do
-    let!(:user1) { create(:user) }
-    let!(:user2) { create(:user) }
-    let!(:user3) { create(:user) }
-    let!(:user4) { create(:user) }
+    let!(:top_user) { create(:user) }
+    let!(:second_user) { create(:user) }
+    let!(:third_user) { create(:user) }
+    let!(:non_top_user) { create(:user) }
 
     context "when there are pictures" do
       before do
-        create_list(:picture, 8, user: user1)
-        create_list(:picture, 5, user: user2)
-        create_list(:picture, 3, user: user3)
-        create_list(:picture, 1, user: user4)
+        create_list(:picture, 8, user: top_user)
+        create_list(:picture, 5, user: second_user)
+        create_list(:picture, 3, user: third_user)
+        create_list(:picture, 1, user: non_top_user)
         get "/api/v1/users/top"
       end
 
@@ -220,11 +220,11 @@ RSpec.describe User, type: :request do
       end
 
       it "returns top user in order" do
-        expect(JSON.parse(response.body)["data"][0]["id"]).to eq(user1.id.to_s)
+        expect(JSON.parse(response.body)["data"][0]["id"]).to eq(top_user.id.to_s)
       end
-      
+
       it "returns third user in order" do
-        expect(JSON.parse(response.body)["data"][2]["id"]).to eq(user3.id.to_s)
+        expect(JSON.parse(response.body)["data"][2]["id"]).to eq(third_user.id.to_s)
       end
     end
   end
