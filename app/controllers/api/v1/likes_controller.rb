@@ -1,5 +1,4 @@
 class Api::V1::LikesController < ApplicationController
-  before_action :authenticate_request
   before_action :set_picture, only: %i[create destroy]
 
   # POST /api/v1/likes
