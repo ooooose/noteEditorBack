@@ -196,48 +196,36 @@ RSpec.describe User, type: :request do
     end
   end
 
-  describe 'GET /api/v1/top_users' do
+  describe "GET /api/v1/pictures/top" do
     let!(:user1) { create(:user) }
     let!(:user2) { create(:user) }
     let!(:user3) { create(:user) }
     let!(:user4) { create(:user) }
 
-    before do
-      create_list(:like, 10, user: user1)
-      create_list(:like, 7, user: user2)
-      create_list(:like, 5, user: user3)
-      create_list(:like, 2, user: user4)
-    end
+    context "when there are pictures" do
+      before do
+        create_list(:picture, 8, user: user1)
+        create_list(:picture, 5, user: user2)
+        create_list(:picture, 3, user: user3)
+        create_list(:picture, 1, user: user4)
+        get "/api/v1/users/top"
+      end
 
-    it 'returns the top 3 users by likes' do
-      get '/api/v1/users/top'
+      it "returns status ok" do
+        expect(response).to have_http_status(:ok)
+      end
 
-      expect(response).to have_http_status(:ok)
+      it "returns top 3 users" do
+        expect(JSON.parse(response.body)["data"].length).to eq(3)
+      end
 
-      json = JSON.parse(response.body, symbolize_names: true)
-
-      expect(json.size).to eq(3)
-
-      expect(json[0][:id]).to eq(user1.id)
-      expect(json[0][:likes_count]).to eq(10)
-
-      expect(json[1][:id]).to eq(user2.id)
-      expect(json[1][:likes_count]).to eq(7)
-
-      expect(json[2][:id]).to eq(user3.id)
-      expect(json[2][:likes_count]).to eq(5)
-    end
-
-    it 'returns an empty array if there are no likes' do
-      Like.delete_all
-
-      get '/api/v1/users/top'
-
-      expect(response).to have_http_status(:ok)
-
-      json = JSON.parse(response.body, symbolize_names: true)
-
-      expect(json).to eq([])
+      it "returns top user in order" do
+        expect(JSON.parse(response.body)["data"][0]["id"]).to eq(user1.id.to_s)
+      end
+      
+      it "returns third user in order" do
+        expect(JSON.parse(response.body)["data"][2]["id"]).to eq(user3.id.to_s)
+      end
     end
   end
 end

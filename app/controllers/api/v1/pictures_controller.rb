@@ -1,7 +1,7 @@
 require "pagy/extras/metadata"
 
 class Api::V1::PicturesController < ApplicationController
-  before_action :authenticate_request, except: :top
+  skip_before_action :authenticate_request, only: %i[top]
   before_action :set_picture, only: %i[destroy]
 
   # GET /api/v1/pictures

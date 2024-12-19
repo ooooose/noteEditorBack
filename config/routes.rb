@@ -7,6 +7,7 @@ Rails.application.routes.draw do
         collection do
           get 'me', to: 'users#me'
           put 'profile', to: 'users#update_profile'
+          get 'top', to: 'users#top'
         end
         
         member do
@@ -14,8 +15,6 @@ Rails.application.routes.draw do
           get 'liked_pictures', to: 'users#liked_pictures'
         end
       end
-
-      get 'users/top', to: 'users#top'
 
       resources :themes, only: %i[index show create update destroy]
       resources :pictures, only: %i[index create update destroy] do

@@ -68,13 +68,15 @@ class Api::V1::UsersController < ApplicationController
 
   # GET /api/v1/users/top
   def top
-    top_users = User.joins(:likes)
-                    .select('users.*, COUNT(likes.id) AS likes_count')
+    top_users = User.joins(:pictures)
+                    .select('users.*, COUNT(pictures.id) AS total_pictures_count')
                     .group('users.id')
-                    .order('likes_count DESC')
+                    .order('total_pictures_count DESC')
                     .limit(3)
 
     render json: UserSerializer.new(top_users).serializable_hash, status: :ok
+  rescue => e
+    render json: { error: "データの取得に失敗しました: #{e.message}" }, status: :internal_server_error
   end
 
   private

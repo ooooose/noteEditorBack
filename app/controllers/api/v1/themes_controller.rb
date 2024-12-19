@@ -1,5 +1,4 @@
 class Api::V1::ThemesController < ApplicationController
-  before_action :authenticate_request
   before_action :set_theme, only: %i[destroy]
 
   # GET /api/v1/themes
