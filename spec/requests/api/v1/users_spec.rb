@@ -195,4 +195,37 @@ RSpec.describe User, type: :request do
       end
     end
   end
+
+  describe "GET /api/v1/pictures/top" do
+    let!(:top_user) { create(:user) }
+    let!(:second_user) { create(:user) }
+    let!(:third_user) { create(:user) }
+    let!(:non_top_user) { create(:user) }
+
+    context "when there are pictures" do
+      before do
+        create_list(:picture, 8, user: top_user)
+        create_list(:picture, 5, user: second_user)
+        create_list(:picture, 3, user: third_user)
+        create_list(:picture, 1, user: non_top_user)
+        get "/api/v1/users/top"
+      end
+
+      it "returns status ok" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "returns top 3 users" do
+        expect(JSON.parse(response.body)["data"].length).to eq(3)
+      end
+
+      it "returns top user in order" do
+        expect(JSON.parse(response.body)["data"][0]["id"]).to eq(top_user.id.to_s)
+      end
+
+      it "returns third user in order" do
+        expect(JSON.parse(response.body)["data"][2]["id"]).to eq(third_user.id.to_s)
+      end
+    end
+  end
 end
