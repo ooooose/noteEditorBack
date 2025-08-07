@@ -33,6 +33,26 @@ RSpec.describe "Api::V1::Pictures", type: :request do
         expect(JSON.parse(response.body)["pictures"]["data"].length).to eq(3)
       end
     end
+
+    context "when the user has soft destroyed pictures" do
+      before do
+        create_list(:picture, 3, user:)
+        Picture.last.soft_destroy
+        get api_v1_pictures_path, headers:
+      end
+
+      it "returns pictures without soft destroyed ones" do
+        expect(JSON.parse(response.body)["pictures"]["data"].length).to eq(2)
+      end
+    end
+
+    context "when unauthenticated" do
+      before { get api_v1_pictures_path }
+
+      it "returns status unauthorized" do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
   end
 
   describe "POST /api/v1/pictures" do
