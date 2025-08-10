@@ -36,7 +36,7 @@ class Api::V1::PicturesController < ApplicationController
     end
   end
 
-  # PATCH /api/v1/pictures/:id
+  # PUT /api/v1/pictures/:id
   def update
     authorize @picture
     if @picture.update(picture_params)
@@ -46,7 +46,7 @@ class Api::V1::PicturesController < ApplicationController
     end
   end
 
-  # PATCH /api/v1/pictures/:id/switch_frame
+  # PUT /api/v1/pictures/:id/switch_frame
   def switch_frame
     authorize @picture, :update?
     if @picture.update(frame_params)

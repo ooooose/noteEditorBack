@@ -109,11 +109,11 @@ RSpec.describe "Api::V1::Pictures", type: :request do
     end
   end
 
-  describe "PATCH /api/v1/pictures/:id/switch_frame" do
+  describe "PUT /api/v1/pictures/:id/switch_frame" do
     context "when the picture exists" do
       params = { picture: { frame_id: 1 } }
       subject(:switch_frame_request) do
-        patch "/api/v1/pictures/#{picture.id}/switch_frame", params:, headers:
+        put "/api/v1/pictures/#{picture.id}/switch_frame", params:, headers:
       end
 
       let!(:picture) { create(:picture, user:, frame_id: 0) }

@@ -25,7 +25,7 @@ Rails.application.routes.draw do
         end
 
         member do
-          patch 'switch_frame', to: 'pictures#switch_frame'
+          put 'switch_frame', to: 'pictures#switch_frame'
         end
       end
 
