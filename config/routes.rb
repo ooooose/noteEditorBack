@@ -23,6 +23,10 @@ Rails.application.routes.draw do
         collection do
           get 'top', to: 'pictures#top'
         end
+
+        member do
+          put 'switch_frame', to: 'pictures#switch_frame'
+        end
       end
 
       resources :likes, param: :picture_uid, only: %i[create destroy]
