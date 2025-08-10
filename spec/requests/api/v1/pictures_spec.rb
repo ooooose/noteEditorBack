@@ -108,4 +108,22 @@ RSpec.describe "Api::V1::Pictures", type: :request do
       end
     end
   end
+
+  describe "PATCH /api/v1/pictures/:id/switch_frame" do
+    context "when the picture exists" do
+      let!(:picture) { create(:picture, user:, frame_id: 0) }
+      params = { picture: { frame_id: 1 } }
+
+      subject do
+        patch "/api/v1/pictures/#{picture.id}/switch_frame", params:, headers:
+      end
+
+      it "returns status ok" do
+        expect(picture.frame_id).to eq(0)
+        subject
+        expect(response).to have_http_status(:ok)
+        expect(picture.reload.frame_id).to eq(1)
+      end
+    end
+  end
 end

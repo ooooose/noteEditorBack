@@ -2,7 +2,7 @@ require "pagy/extras/metadata"
 
 class Api::V1::PicturesController < ApplicationController
   skip_before_action :authenticate_request, only: %i[top]
-  before_action :set_picture, only: %i[destroy]
+  before_action :set_picture, only: %i[update switch_frame destroy]
 
   # GET /api/v1/pictures
   def index
@@ -46,6 +46,16 @@ class Api::V1::PicturesController < ApplicationController
     end
   end
 
+  # PATCH /api/v1/pictures/:id/switch_frame
+  def switch_frame
+    authorize @picture, :update?
+    if @picture.update(frame_params)
+      render json: { message: "Frame switched successfully" }, status: :ok
+    else
+      render json: { error: @picture.errors.full_messages.join(", ") }, status: :unprocessable_entity
+    end
+  end
+
   # DELETE /api/v1/pictures/:id
   def destroy
     authorize @picture
@@ -69,5 +79,9 @@ class Api::V1::PicturesController < ApplicationController
 
     def picture_params
       params.require(:picture).permit(:image_url, :frame_id)
+    end
+
+    def frame_params
+      params.require(:picture).permit(:frame_id)
     end
 end
