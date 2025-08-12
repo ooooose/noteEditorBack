@@ -33,9 +33,9 @@ RSpec.describe User, type: :request do
   end
 
   describe "GET /api/v1/users/me" do
-    let!(:user) { create(:user) }
-    let!(:token) { encode_jwt({ user_id: user.id }) }
-    let!(:headers) { { Authorization: "Bearer #{token}" } }
+    let(:user) { create(:user) }
+    let(:token) { encode_jwt({ user_id: user.id }) }
+    let(:headers) { { Authorization: "Bearer #{token}" } }
 
     context "when valid request" do
       before do
@@ -164,10 +164,9 @@ RSpec.describe User, type: :request do
     let(:user) { create(:user) }
     let(:token) { encode_jwt({ user_id: user.id }) }
     let(:headers) { { Authorization: "Bearer #{token}" } }
-
+    let(:theme) { create(:theme) }
+    let!(:picture) { create(:picture, theme:) }
     before do
-      theme = create(:theme)
-      picture = create(:picture, theme:)
       create(:like, user:, picture:)
     end
 
@@ -182,6 +181,22 @@ RSpec.describe User, type: :request do
 
       it "returns pictures" do
         expect(JSON.parse(response.body)["pictures"]["data"].length).to eq(1)
+      end
+    end
+
+    context "when has soft destroyed pictures" do
+      before do
+        picture.update!(deleted_at: Time.current)
+      end
+      
+      it "returns status ok" do
+        get "/api/v1/users/#{user.uid}/liked_pictures", headers: headers
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "returns no pictures" do
+        get "/api/v1/users/#{user.uid}/liked_pictures", headers: headers
+        expect(JSON.parse(response.body)["pictures"]["data"].length).to eq(0)
       end
     end
 
