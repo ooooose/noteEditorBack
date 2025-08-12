@@ -51,7 +51,8 @@ class Api::V1::UsersController < ApplicationController
 
   # GET /api/v1/users/:uid/liked_pictures
   def liked_pictures
-    pagy, pictures = pagy(@user.liked_pictures.includes([:likes, :theme, :user]).without_soft_destroyed.order(created_at: :desc))
+    pagy, pictures = pagy(@user.liked_pictures.includes([:likes, :theme,
+                                                         :user]).without_soft_destroyed.order(created_at: :desc))
     render json: {
       pictures: PictureSerializer.new(pictures, include: [:user, :theme, :likes]).serializable_hash,
       pagy: pagy_metadata(pagy),

@@ -166,6 +166,7 @@ RSpec.describe User, type: :request do
     let(:headers) { { Authorization: "Bearer #{token}" } }
     let(:theme) { create(:theme) }
     let!(:picture) { create(:picture, theme:) }
+
     before do
       create(:like, user:, picture:)
     end
@@ -188,14 +189,14 @@ RSpec.describe User, type: :request do
       before do
         picture.update!(deleted_at: Time.current)
       end
-      
+
       it "returns status ok" do
-        get "/api/v1/users/#{user.uid}/liked_pictures", headers: headers
+        get("/api/v1/users/#{user.uid}/liked_pictures", headers:)
         expect(response).to have_http_status(:ok)
       end
 
       it "returns no pictures" do
-        get "/api/v1/users/#{user.uid}/liked_pictures", headers: headers
+        get("/api/v1/users/#{user.uid}/liked_pictures", headers:)
         expect(JSON.parse(response.body)["pictures"]["data"].length).to eq(0)
       end
     end
