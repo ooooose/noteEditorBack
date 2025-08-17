@@ -1,7 +1,7 @@
 require "pagy/extras/metadata"
 
 class Api::V1::PicturesController < ApplicationController
-  skip_before_action :authenticate_request, only: %i[top]
+  skip_before_action :authenticate_request, only: %i[top show]
   before_action :set_picture, only: %i[update switch_frame destroy]
 
   # GET /api/v1/pictures
@@ -33,6 +33,15 @@ class Api::V1::PicturesController < ApplicationController
       end
     else
       render json: { errors: theme.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  def show
+    picture = Picture.find_by(uid: params[:id])
+    if picture.present?
+      render json: PictureSerializer.new(picture).serializable_hash, status: :ok
+    else
+      render json: { error: "Picture not found" }, status: :not_found
     end
   end
 
