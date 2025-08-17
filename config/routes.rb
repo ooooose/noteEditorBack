@@ -17,11 +17,15 @@ Rails.application.routes.draw do
       end
 
       resources :themes, only: %i[index show create update destroy]
-      resources :pictures, only: %i[index create update destroy] do
+      resources :pictures, only: %i[index create show update destroy] do
         resources :comments, only: %i[index show create update destroy]
 
         collection do
           get 'top', to: 'pictures#top'
+        end
+
+        member do
+          put 'switch_frame', to: 'pictures#switch_frame'
         end
       end
 

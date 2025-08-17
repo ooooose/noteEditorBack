@@ -33,6 +33,26 @@ RSpec.describe "Api::V1::Pictures", type: :request do
         expect(JSON.parse(response.body)["pictures"]["data"].length).to eq(3)
       end
     end
+
+    context "when the user has soft destroyed pictures" do
+      before do
+        create_list(:picture, 3, user:)
+        Picture.last.soft_destroy
+        get api_v1_pictures_path, headers:
+      end
+
+      it "returns pictures without soft destroyed ones" do
+        expect(JSON.parse(response.body)["pictures"]["data"].length).to eq(2)
+      end
+    end
+
+    context "when unauthenticated" do
+      before { get api_v1_pictures_path }
+
+      it "returns status unauthorized" do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
   end
 
   describe "POST /api/v1/pictures" do
@@ -85,6 +105,27 @@ RSpec.describe "Api::V1::Pictures", type: :request do
 
       it "returns top pictures" do
         expect(JSON.parse(response.body)["data"].length).to eq(6)
+      end
+    end
+  end
+
+  describe "PUT /api/v1/pictures/:id/switch_frame" do
+    context "when the picture exists" do
+      params = { picture: { frame_id: 1 } }
+      subject(:switch_frame_request) do
+        put "/api/v1/pictures/#{picture.id}/switch_frame", params:, headers:
+      end
+
+      let!(:picture) { create(:picture, user:, frame_id: 0) }
+
+      it "returns status ok" do
+        switch_frame_request
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "changed the frame_id" do
+        switch_frame_request
+        expect(picture.reload.frame_id).to eq(1)
       end
     end
   end

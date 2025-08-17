@@ -1,12 +1,12 @@
 require "pagy/extras/metadata"
 
 class Api::V1::PicturesController < ApplicationController
-  skip_before_action :authenticate_request, only: %i[top]
-  before_action :set_picture, only: %i[destroy]
+  skip_before_action :authenticate_request, only: %i[top show]
+  before_action :set_picture, only: %i[update switch_frame destroy]
 
   # GET /api/v1/pictures
   def index
-    pagy, pictures = pagy(Picture.includes([:likes, :theme, :user]).order(created_at: :desc))
+    pagy, pictures = pagy(Picture.includes([:likes, :theme, :user]).without_soft_destroyed.order(created_at: :desc))
     render json: {
       pictures: PictureSerializer.new(pictures, include: [:user, :theme, :likes]).serializable_hash,
       pagy: pagy_metadata(pagy),
@@ -36,11 +36,30 @@ class Api::V1::PicturesController < ApplicationController
     end
   end
 
-  # PATCH /api/v1/pictures/:id
+  def show
+    picture = Picture.find_by(uid: params[:id])
+    if picture.present?
+      render json: PictureSerializer.new(picture).serializable_hash, status: :ok
+    else
+      render json: { error: "Picture not found" }, status: :not_found
+    end
+  end
+
+  # PUT /api/v1/pictures/:id
   def update
     authorize @picture
     if @picture.update(picture_params)
       render json: @picture, serializer: PictureSerializer, status: :ok
+    else
+      render json: { error: @picture.errors.full_messages.join(", ") }, status: :unprocessable_entity
+    end
+  end
+
+  # PUT /api/v1/pictures/:id/switch_frame
+  def switch_frame
+    authorize @picture, :update?
+    if @picture.update(frame_params)
+      render json: { message: "Frame switched successfully" }, status: :ok
     else
       render json: { error: @picture.errors.full_messages.join(", ") }, status: :unprocessable_entity
     end
@@ -57,17 +76,21 @@ class Api::V1::PicturesController < ApplicationController
 
   # GET /api/v1/pictures/top
   def top
-    pictures = Picture.includes(:likes, :user, :theme).order(created_at: :desc).limit(6)
+    pictures = Picture.includes(:likes, :user, :theme).without_soft_destroyed.order(created_at: :desc).limit(6)
     render json: PictureSerializer.new(pictures, include: [:user, :likes]).serializable_hash, status: :ok
   end
 
   private
 
     def set_picture
-      @picture = current_user.pictures.find_by(uid: params[:id])
+      @picture = current_user.pictures.find(params[:id])
     end
 
     def picture_params
       params.require(:picture).permit(:image_url, :frame_id)
+    end
+
+    def frame_params
+      params.require(:picture).permit(:frame_id)
     end
 end

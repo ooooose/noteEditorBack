@@ -26,6 +26,8 @@ class Picture < ApplicationRecord
   validates :frame_id, presence: true
   validates :uid, presence: true, uniqueness: true
 
+  scope :without_soft_destroyed, -> { where(deleted_at: nil) }
+
   def soft_destroy
     update!(deleted_at: Time.current)
   end
