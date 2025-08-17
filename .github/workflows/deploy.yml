@@ -23,6 +23,9 @@ jobs:
       - name: Docker build
         run: docker login --username=$USERNAME --password=$HEROKU_API_KEY registry.heroku.com
 
+      - name: Set up Heroku CLI
+        run: curl https://cli-assets.heroku.com/install.sh | sh
+
       - name: publish
         run: |
           docker build -t registry.heroku.com/$APP_NAME/web -f Dockerfile.prod .
