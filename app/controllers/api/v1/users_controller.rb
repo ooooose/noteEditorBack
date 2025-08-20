@@ -69,9 +69,10 @@ class Api::V1::UsersController < ApplicationController
 
   # GET /api/v1/users/top
   def top
-    top_users = User.includes(:pictures).
-                  joins(:pictures).
+    top_users = User.
+                  includes(:pictures).
                   select("users.*, COUNT(pictures.id) AS total_pictures_count").
+                  joins(:pictures).
                   group("users.id").
                   order("total_pictures_count DESC").
                   limit(3)
