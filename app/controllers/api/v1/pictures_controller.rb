@@ -76,7 +76,7 @@ class Api::V1::PicturesController < ApplicationController
 
   # GET /api/v1/pictures/top
   def top
-    pictures = Picture.includes(:likes, :user, :theme).without_soft_destroyed.order(created_at: :desc).limit(6)
+    pictures = Picture.includes(:likes, :user).without_soft_destroyed.order(created_at: :desc).limit(6)
     render json: PictureSerializer.new(pictures, include: [:user, :likes]).serializable_hash, status: :ok
   end
 
