@@ -39,7 +39,7 @@ class Api::V1::PicturesController < ApplicationController
   def show
     picture = Picture.find_by(uid: params[:id])
     if picture.present?
-      render json: PictureSerializer.new(picture).serializable_hash, status: :ok
+      render json: PictureSerializer.new(picture, include: [:user, :theme, :likes]).serializable_hash, status: :ok
     else
       render json: { error: "Picture not found" }, status: :not_found
     end
