@@ -20,6 +20,7 @@ class Api::V1::PicturesController < ApplicationController
     if theme.persisted?
       picture = current_user.pictures.build(
         image_url: picture_params[:image_url],
+        ogp_image_url: picture_params[:ogp_image_url],
         theme:,
         uid: SecureRandom.uuid
       )
@@ -87,7 +88,7 @@ class Api::V1::PicturesController < ApplicationController
     end
 
     def picture_params
-      params.require(:picture).permit(:image_url, :frame_id)
+      params.require(:picture).permit(:image_url, :ogp_image_url, :frame_id)
     end
 
     def frame_params
